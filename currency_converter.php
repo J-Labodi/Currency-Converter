@@ -9,7 +9,8 @@ parameter not recognised - error message should report on the first error
 
 
 
-// TODO Check latest update and call the API if needed
+// TODO Check latest update in XML
+// TODO call the API to update rates if needed
 
 /* Fixer API - Exchange rate must be up to date - 
 must not be more than 12 hours old */
@@ -44,9 +45,11 @@ echo '</pre>';
 
 // Decode json response 
 
-/*
-$array = json_decode($response, true);
 
+$array = json_decode($response, true);
+print_r($array);
+
+/*
 foreach($array as $key => $value) {
   echo $key . " => " . $value . "<br>";
 
