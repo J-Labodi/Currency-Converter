@@ -2,26 +2,25 @@
 session_start();
 extract($_GET);
 
-/*
-Get data from query string 
-$from = $_GET['from'];
-$to = $_GET['to'];
-$amnt = $_GET['amnt'];
-$format = $_GET['format'];
-*/
-
-
-/* TODO if format is missing, system should use xml as default 
+/* TODO if format is missing, system should return xml as default 
 TODO if there is more than one error in request - parameter is missing and 
-parameter not recognized - error message should report on the first error 
+parameter not recognised - error message should report on the first error 
 */
 
 
-// Fixer API
+
+// TODO Check latest update and call the API if needed
+
+/* Fixer API - Exchange rate must be up to date - 
+must not be more than 12 hours old */
+
 $curl = curl_init();
 
+$base = "GBP";
+$symbols = "AUD,BRL,CAD,CHF,CNY,DKK,EUR,GBP,HKD,HUF,INR,JPY,MXN,MYR,NOK,NZD,PHP,RUB,SEK,SGD,THB,TRY,USD,ZAR";
+
 curl_setopt_array($curl, array(
-  CURLOPT_URL => "https://api.apilayer.com/fixer/convert?to=" . $to . "&from=" . $from . "&amount=" . $amnt,
+  CURLOPT_URL => "https://api.apilayer.com/fixer/latest?symbols={$symbols}&base={$base}",
   CURLOPT_HTTPHEADER => array(
     "Content-Type: text/plain",
     "apikey: Dq3fsfF37Akclavu8mqrD3R723E4KOJm"
@@ -38,11 +37,20 @@ curl_setopt_array($curl, array(
 $response = curl_exec($curl);
 
 curl_close($curl);
+echo '<pre>';
 echo $response;
+echo '</pre>';
 
+
+// Decode json response 
+
+/*
 $array = json_decode($response, true);
 
 foreach($array as $key => $value) {
   echo $key . " => " . $value . "<br>";
 
 }
+*/
+
+// TODO Perhaps create config file for API key
