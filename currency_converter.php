@@ -1,7 +1,7 @@
 <?php
 session_start();
-extract($_GET);
 date_default_timezone_set('Europe/London');
+extract($_GET);
 
 function callAPI(){
   /* Fixer API - Exchange rate must be up to date - 
@@ -35,8 +35,7 @@ function callAPI(){
   echo '</pre>';
 
 
-  // Decode json response 
-
+  // decode json response 
   $array = json_decode($response, true);
   echo '<pre>';
   print_r($array["rates"]);
