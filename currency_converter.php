@@ -2,13 +2,6 @@
 session_start();
 extract($_GET);
 
-/* TODO if format is missing, system should return xml as default 
-TODO if there is more than one error in request - parameter is missing and 
-parameter not recognised - error message should report on the first error 
-*/
-
-
-
 // TODO Check latest update in XML
 // TODO call the API to update rates if needed
 
@@ -45,9 +38,10 @@ echo '</pre>';
 
 // Decode json response 
 
-
 $array = json_decode($response, true);
-print_r($array);
+echo '<pre>';
+print_r($array["rates"]);
+echo '</pre>';
 
 /*
 foreach($array as $key => $value) {
@@ -56,4 +50,18 @@ foreach($array as $key => $value) {
 }
 */
 
+
+// TODO Insert rates to rates.xml
+
+
+// TODO Complete conversion based on query string 
+
+
+/* TODO if format is missing, system should return xml as default 
+TODO if there is more than one error in request - parameter is missing and 
+parameter not recognised - error message should report on the first error 
 // TODO Perhaps create config file for API key
+*/
+
+
+
