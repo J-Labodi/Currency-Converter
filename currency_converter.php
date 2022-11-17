@@ -28,17 +28,19 @@ function callAPI(){
   ));
 
   $response = curl_exec($curl);
-
+/*
   curl_close($curl);
   echo '<pre>';
   echo $response;
   echo '</pre>';
-
+*/
 
   // decode json response 
   $array = json_decode($response, true);
   echo '<pre>';
+  print_r($array);
   print_r($array["rates"]);
+  global $array;
   echo '</pre>';
 
 }
@@ -65,15 +67,23 @@ echo "Time difference is: ", $time_diff, "<br>";
 
 // call the API to update rates if needed
 if ($time_diff > 43200){
+  //callAPI();
   echo "It is time to call the API";
 }
 
+
 // TODO Insert rates to rates.xml
+// Getting rates from xml
+foreach($xmldoc->getElementsByTagName('rate') as $child){
+  echo 'attribute value is: ' . $child->getAttribute('rate') . '<br>';
+}
+
+
+
+
 
 
 // TODO Complete conversion based on query string 
-
-
 /* TODO if format is missing, system should return xml as default 
 TODO if there is more than one error in request - parameter is missing and 
 parameter not recognised - error message should report on the first error 

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rates base="GBP" timestamp="1668054041">
+    <rate code="" rate="262" live="0"/>
+    <rate code="" rate="22" live="0"/>
+    <rate code="" rate="3" live="0"/>
+    <rate code="" rate="5" live="0"/>
+    <rate code="" rate="31" live="0"/>
+    <rate code="" rate="6" live="0"/>
+    <rate code="" rate="2" live="0"/>
+    <rate code="" rate="3" live="0"/>
+    <rate code="" rate="6" live="0"/>
+    <rate code="" rate="44" live="0"/>
+    <rate code="" rate="4" live="0"/>
+    <rate code="" rate="44" live="0"/>
+    <rate code="" rate="3" live="0"/>
+    <rate code="" rate="3" live="0"/>
+    <rate code="" rate="66" live="0"/>
     <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
-    <rate code="" rate="" live="0"/>
+    <rate code="" rate="3" live="0"/>
+    <rate code="" rate="22" live="0"/>
+    <rate code="" rate="555" live="0"/>
+    <rate code="" rate="44" live="0"/>
+    <rate code="" rate="33" live="0"/>
+    <rate code="" rate="22" live="0"/>
+    <rate code="" rate="33" live="0"/>
+    <rate code="" rate="4" live="0"/>
 </rates>
