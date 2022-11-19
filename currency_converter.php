@@ -38,11 +38,10 @@ function callAPI(){
   // decode json response 
   $array = json_decode($response, true);
   echo '<pre>';
-  print_r($array);
-  print_r($array["rates"]);
-  global $array;
+  global $rates_array;
+  $rates_array = array_slice($array["rates"], 0); 
   echo '</pre>';
-
+  
 }
 
 // Check latest update in XML
@@ -67,16 +66,47 @@ echo "Time difference is: ", $time_diff, "<br>";
 
 // call the API to update rates if needed
 if ($time_diff > 43200){
-  //callAPI();
+  callAPI();
   echo "It is time to call the API";
 }
+/*
+echo "GL: <br>"; 
+print_r($rates_array);
+echo "<br>/GL";
+*/
+/*
+echo '<br>';
+echo 'loop through:<br>';
+foreach($rates_array as $key => $value) { 
+  echo $key . ": " . $value . "<br>"; 
+} 
 
-
-// TODO Insert rates to rates.xml
 // Getting rates from xml
 foreach($xmldoc->getElementsByTagName('rate') as $child){
   echo 'attribute value is: ' . $child->getAttribute('rate') . '<br>';
 }
+*/
+
+// TODO Insert rates to rates.xml
+
+
+echo 'loop through:<br>';
+foreach($rates_array as $key => $value) { 
+  echo $key . ": " . $value . "<br>"; 
+} 
+echo '<br>';
+
+foreach($xmldoc->getElementsByTagName('rate') as $child){
+  foreach($rates_array as $key => $value){
+    $child->setAttribute('rate', $value);
+    $xmldoc->saveXML();
+    $xmldoc->save('file.xml');
+  }
+  $xmldoc->saveXML();
+  $xmldoc->save('file.xml');
+}
+
+ 
 
 
 
@@ -89,6 +119,6 @@ TODO if there is more than one error in request - parameter is missing and
 parameter not recognised - error message should report on the first error 
 // TODO create config file for API key
 */
-
-
+// Rename file to index.php
 //test
+?>
