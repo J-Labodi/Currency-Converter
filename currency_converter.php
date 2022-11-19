@@ -97,10 +97,12 @@ foreach($rates_array as $key => $value) {
 echo '<br>';
 
 foreach($xmldoc->getElementsByTagName('rate') as $child){
+  echo "outer loop: <br>";
   foreach($rates_array as $key => $value){
+    echo "first inner loop: <br>";
     $child->setAttribute('rate', $value);
-    $xmldoc->saveXML();
-    $xmldoc->save('file.xml');
+    echo 'value to be set is : ' . $value . '<br>';
+    echo "attribute is set <br>";
   }
   $xmldoc->saveXML();
   $xmldoc->save('file.xml');
