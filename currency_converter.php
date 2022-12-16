@@ -43,7 +43,9 @@ function callAPI(){
   echo '</pre>';
   
 }
-
+echo '<pre>';
+    echo $response;
+echo '</pre>';
 // Check latest update in XML
 $xmldoc = new DOMDocument();
 $xmldoc->load('rates.xml');
@@ -66,7 +68,7 @@ echo "Time difference is: ", $time_diff, "<br>";
 
 // call the API to update rates if needed
 if ($time_diff > 43200){
-  callAPI();
+  //callAPI();
   echo "It is time to call the API";
 }
 /*
