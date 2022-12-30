@@ -97,7 +97,7 @@ function generateErrorm($code){
 
 // ensure base file exist - if true, get values
 if (file_exists('rates.xml')){
-  $q_string = extract($_GET);
+  extract($_GET);
 }
 else{
   exit('Base file not found');
@@ -267,6 +267,8 @@ json error doesn't show root
 compare with prakash code example
 
 change code for localhost instead of localhost:8000
+
+open xml system error? L146
 
 */
 ?>

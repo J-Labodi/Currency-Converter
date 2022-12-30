@@ -110,7 +110,7 @@
         <curr>Turkish Lira</curr>
         <loc>Turkey</loc>
     </currency>
-    <currency rate="1.205908" live="0">
+    <currency rate="1.207058" live="1">
         <code>USD</code>
         <curr>US Dollar</curr>
         <loc>United States, American Samoa, British Indian Ocean Territory, British Virgin Islands, Caribbean Netherlands, Ecuador, El Salvador, Guam, Marshall Islands, Federated States of Micronesia, Northern Mariana Islands, Palau, Panama, Puerto Rico, Timor-Leste, Turks and Caicos Islands, U.S. Virgin Islands, United States Minor Outlying Islands</loc>
