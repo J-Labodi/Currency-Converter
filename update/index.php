@@ -1,25 +1,14 @@
 <?php
 session_start();
-date_default_timezone_set('Europe/London');
+// include config data
+include('../config.php'); 
 
-// define constants - supported actions
-define('ACTIONS', array("put", "post", "del"));
-
-// define constants - error messages
-define('ERRMESSAGES', array(
-"2000" => "Action not recognized or is missing",
-"2100" => "Currency code in wrong format or is missing",
-"2200" => "Currency code not found for update",
-"2300" => "No rate listed for this currency",
-"2400" => "Cannot update base currency",
-"2500" => "Error in service"
-));
 
 function getRate($symbol){
 
     $curl = curl_init();
   
-    $base = "GBP";
+    $base = constant("BASE");
   
     curl_setopt_array($curl, array(
       CURLOPT_URL => "https://api.apilayer.com/fixer/latest?symbols={$symbol}&base={$base}",
@@ -51,6 +40,8 @@ else{
   exit('Base file not found');
 }
 
+// load rates.xml with simpleXML
+$xml = simplexml_load_file("../rates.xml") or die ("Error: Cannot load rates file");
 
 // ERROR HANDLING
 
@@ -64,9 +55,16 @@ if (empty($cur) || !ctype_upper($cur) || strlen($cur) != 3){
     exit();
 }
 
+// ERROR 2200 - check if the currency within live currencies of rates 
+if($cur){
 
-// load rates.xml with simpleXML
-$xml = simplexml_load_file("../rates.xml") or die ("Error: Cannot create object");
+
+
+
+  
+}
+
+
 
 // PUT
 /*generate a call to the external rate service and 
@@ -80,7 +78,7 @@ if($action == 'put'){
     // update rate and live attribute
     $cur_to_update[0]['rate'] = getRate($cur);
     $xml->asXMl('../rates.xml');
-    
+
     // generate response xml
     $dom = new DOMDocument();
     $dom->encoding = "UTF-8";
@@ -125,9 +123,7 @@ new record in the xml
 
 
 // DELETE
-/* Make the currency unavailable to the service - 1200*/
-// add currency to blacklist 
-
+/* Make the currency unavailable to the service*/
 
 global $blacklist;
 $blacklist = array(); 
@@ -159,9 +155,4 @@ if($action == 'del'){
   echo '<pre>' . $dom->saveXML() . '</pre>';
 
 }
-
-
-
-
-
 ?>

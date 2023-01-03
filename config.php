@@ -31,5 +31,20 @@ define('RATES', 'rates.xml');
 define ('ISO_XML', 'https://www.six-group.com/dam/download/financial-information/data-center/iso-currrency/lists/list-one.xml');
 
 define('BASE', 'GBP');
+
+
+// define constants - supported actions of update functionality
+define('ACTIONS', array("put", "post", "del"));
+
+// define constants - error messages of update functionality
+define('ERRMESSAGES2', array(
+       "2000" => "Action not recognized or is missing",
+       "2100" => "Currency code in wrong format or is missing",
+       "2200" => "Currency code not found for update",
+       "2300" => "No rate listed for this currency",
+       "2400" => "Cannot update base currency",
+       "2500" => "Error in service"
+));
+
 ?>
 
