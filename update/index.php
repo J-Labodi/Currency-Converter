@@ -69,17 +69,48 @@ if (empty($cur) || !ctype_upper($cur) || strlen($cur) != 3){
 $xml = simplexml_load_file("../rates.xml") or die ("Error: Cannot create object");
 
 // PUT
-/*generate a call to the external rate sservice and 
+/*generate a call to the external rate service and 
 update the rate value for the specific currency in the xml file
 */
 if($action == 'put'){
     // generate call to API - update rate and live attr in rates.xml
     $cur_to_update = $xml->xpath("/rates/currency[code='$cur']");
+    // store old rate 
+    $old_rate = (string) $cur_to_update[0]['rate'];
+    // update rate and live attribute
     $cur_to_update[0]['rate'] = getRate($cur);
-    $cur_to_update[0]['live'] = '1';
     $xml->asXMl('../rates.xml');
     
     // generate response xml
+    $dom = new DOMDocument();
+    $dom->encoding = "UTF-8";
+    $dom->xmlVersion = "1.0";
+    $dom->formatOutput = true;
+
+    $root = $dom->createElement('action');
+    $type_attr = new DOMAttr('type', 'put');
+    $root->setAttributeNode($type_attr);
+
+    $at_node = $dom->createElement('at', date("d M Y H:i"));
+    $rate_node = $dom->createElement('rate', $cur_to_update[0]['rate']);
+    $old_rate_node = $dom->createElement('old_rate', $old_rate);
+    $curr_node = $dom->createElement('curr');
+
+    $root->appendChild($at_node);
+    $root->appendChild($rate_node);
+    $root->appendChild($old_rate_node);
+    $root->appendChild($curr_node);
+
+    $child_node_code = $dom->createElement('code', $cur_to_update[0]->code);
+    $curr_node->appendChild($child_node_code);
+    $child_node_name = $dom->createElement('name',$cur_to_update[0]->curr);
+    $curr_node->appendChild($child_node_name);
+    $child_node_loc = $dom->createElement('loc', $cur_to_update[0]->loc);
+    $curr_node->appendChild($child_node_loc);
+
+    $dom->appendChild($root);
+
+    echo '<pre>' . $dom->saveXML() . '</pre>';
 
 }
 
@@ -96,6 +127,41 @@ new record in the xml
 // DELETE
 /* Make the currency unavailable to the service - 1200*/
 // add currency to blacklist 
+
+
+global $blacklist;
+$blacklist = array(); 
+
+if($action == 'del'){
+
+  $cur_to_delete = $xml->xpath("/rates/currency[code='$cur']");
+
+  // generate response xml
+  $dom = new DOMDocument();
+  $dom->encoding = "UTF-8";
+  $dom->xmlVersion = "1.0";
+  $dom->formatOutput = true;  
+
+  $root = $dom->createElement('action');
+  $type_attr = new DOMAttr('type', 'del');
+  $root->setAttributeNode($type_attr);
+
+  $at_node = $dom->createElement('at', date("d M Y H:i"));
+  $code_node = $dom->createElement('code', $cur_to_delete[0]->code);
+  
+  $root->appendChild($at_node);
+  $root->appendChild($code_node);
+
+  $dom->appendChild($root);
+
+  array_push($blacklist, $cur);
+
+  echo '<pre>' . $dom->saveXML() . '</pre>';
+
+}
+
+
+
 
 
 ?>

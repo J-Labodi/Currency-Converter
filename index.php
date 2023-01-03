@@ -1,33 +1,16 @@
 <?php
 session_start();
-date_default_timezone_set('Europe/London');
 
-// define constants - supported parameters, formats, currencies
-define('PARAMS', array("from", "to", "amnt", "format"));
+// include config data
+include('config.php'); 
 
-define('FORMATS', array("xml", "json"));
-
-define('CURRENCIES', array("AUD", "BRL", "CAD", "CHF", 
-"CNY", "DKK", "EUR", "GBP", "HKD", "HUF", "INR", "JPY", 
-"MXN", "MYR", "NOK", "NZD", "PHP", "RUB", "SEK", "SGD", 
-"THB", "TRY", "USD", "ZAR"));
-
-// define constants - error messages
-define('ERRMESSAGES', array(
-"1000" => "Required parameter is missing",
-"1100" => "Parameter not recognized",
-"1200" => "Currency type not recognized",
-"1300" => "Currency amount must be a decimal number",
-"1400" => "Format must be xml or json",
-"1500" => "Error in service"
-));
 
 function callAPI(){
 
   $curl = curl_init();
 
-  $base = "GBP";
-  $symbols = "AUD,BRL,CAD,CHF,CNY,DKK,EUR,GBP,HKD,HUF,INR,JPY,MXN,MYR,NOK,NZD,PHP,RUB,SEK,SGD,THB,TRY,USD,ZAR";
+  $base = constant("BASE");
+  $symbols = implode(",", LIVE);
 
   curl_setopt_array($curl, array(
     CURLOPT_URL => "https://api.apilayer.com/fixer/latest?symbols={$symbols}&base={$base}",
@@ -56,7 +39,7 @@ function callAPI(){
   
 }
 
-function generateErrorm($code){
+function generateErrorm($err_code){
 
   // generate xml error output
   $dom_err = new DOMDocument();
@@ -69,8 +52,8 @@ function generateErrorm($code){
 
   $err_root->appendChild($err_node);
 
-  $child_node_code = $dom_err->createElement('code', $code);  
-  $child_node_msg = $dom_err->createElement('msg', ERRMESSAGES[$code]); 
+  $child_node_code = $dom_err->createElement('code', $err_code);  
+  $child_node_msg = $dom_err->createElement('msg', ERRMESSAGES[$err_code]); 
 
   $err_node->appendChild($child_node_code);
   $err_node->appendChild($child_node_msg);
@@ -95,13 +78,98 @@ function generateErrorm($code){
   }    
 }
 
-// ensure base file exist - if true, get values
-if (file_exists('rates.xml')){
-  extract($_GET);
+function generateRatesXML(){
+
+  // get the iso currencies xml file
+  $iso_xml = simplexml_load_file(ISO_XML) or die("Error: Cannot load currencies file");   
+  // get all the currency codes
+  $iso_codes = $iso_xml->xpath("//CcyNtry/Ccy");
+
+  $codes=[];
+  foreach ($iso_codes as $code) {
+    $codes[] = (string) $code;
+  }
+  $codes = array_unique($codes);
+
+  // create an array of unique (sorted) codes
+  foreach ($iso_codes as $code) {
+    if (!in_array($code, $codes)) {
+      $codes[] = (string) $code;
+    }
+  }
+
+  sort($codes);
+
+  // build the document with XMLWriter
+  $writer = new XMLWriter();
+  $writer->openMemory();
+  $writer->startDocument("1.0", "UTF-8");
+  $writer->startElement("rates");
+  $writer->writeAttribute('ts', '0');
+  $writer->writeAttribute('base', BASE);
+
+  foreach ($codes as $code) { 
+
+    // pull all currencies that matches the current code
+    $nodes = $iso_xml->xpath("//Ccy[.='$code']/parent::*");
+    
+    // get the code value from the first entry 
+    $cname =  $nodes[0]->CcyNm;
+
+    $writer->startElement('currency');
+    
+    $writer->writeAttribute('rate', '');
+    
+        
+    if (in_array($code, LIVE)) {
+      $writer->writeAttribute('live', 1);
+    }
+    else {
+      $writer->writeAttribute('live', 0);
+    }
+    
+    $writer->startElement('code');
+    $writer->text($code);
+    $writer->endElement();
+    $writer->startElement("curr");
+    $writer->text($cname);
+    $writer->endElement();
+
+    $writer->startElement("loc");
+        
+    $last = count($nodes) - 1;
+        
+    /* group countries together using the same code
+    and lowercase first letter in name and 
+    then write it out with the first letter upper-cased
+    */
+    foreach ($nodes as $index=>$node) {
+      $writer->text(mb_convert_case($node->CtryNm, MB_CASE_TITLE, "UTF-8"));
+      if ($index!=$last) {$writer->text(', ');}
+    }
+    
+    // end the loc element
+    $writer->endElement();
+    
+    // end the currency element
+    $writer->endElement();
+  }
+
+  // end the root element and document
+  $writer->endElement();
+  $writer->endDocument();
+
+  // write out and save the file
+  file_put_contents(RATES, $writer->outputMemory());
 }
-else{
-  exit('Base file not found');
+
+// ensure rates file exist - if false, generate it
+if (!file_exists('rates.xml')){
+  generateRatesXML();
 }
+
+// get parameters from query string 
+extract($_GET);
 
 // ensure parameters in query string are valid
 if ($_GET){
@@ -125,7 +193,7 @@ if (empty($from) || empty($to) || empty($amnt)){
 }
 
 // ensure provided currency type is supported
-if (!in_array($from, CURRENCIES) || !in_array($to, CURRENCIES)){
+if (!in_array($from, LIVE) || !in_array($to, LIVE)){
   generateErrorm("1200");
   exit();
 }
@@ -143,25 +211,28 @@ if (!empty($format) && !in_array($format, FORMATS)){
 }
 
 // load rates.xml with simpleXML
-$xml = simplexml_load_file("rates.xml") or die ("Error: Cannot create object");
+$xml = simplexml_load_file("rates.xml") or die ("Error: Cannot load rates file");
 
 // ensure data is older than 12 hours
 $t = time();
 $rates_ts = (int) $xml['ts'];
 $time_diff = $t - $rates_ts;
 
-// update rates file, reinitialize rates if data older than 12 hours
+// update rate in rates.xml
 if($time_diff > 43200){  
-  // utilise callAPI function
+
+  // utilise callAPI() function
   callAPI();
 
   // update currency rates in rates.xml
-  $count = 0;
   $rate_att = 'rate';
   foreach ($response['rates'] as $k => $v){
-    // access xml attribute and update it
-    $xml->currency[$count]->attributes()->$rate_att = $v;
-    $count++;
+    // access node from rates.xml file
+    $node = $xml->xpath("./currency[code = '$k']");
+
+    // update rate 
+    $node[0]->attributes()->rate = $v;
+
     $xml->asXMl('rates.xml');
   }
 
@@ -172,33 +243,16 @@ if($time_diff > 43200){
   $rates_ts = (int) $xml['ts'];
 }
 
-/*
-echo "current: " . $time . '<br>';
-echo "rates: " . $rates_ts . '<br>';
-echo "time diff: " . $time_diff;
-*/
-
-// access values to complete conversion - rate, code, curr, location
+// access element to complete conversion from
 $conv_from = $xml->xpath("/rates/currency[code='$from']");
 
-$conv_from_rate = $conv_from[0]['rate'];
-$conv_from_code = $conv_from[0]->code;
-$conv_from_curr = $conv_from[0]->curr;
-$conv_from_loc = $conv_from[0]->loc;
-
-
+// access element to complete conversion to
 $conv_to = $xml->xpath("/rates/currency[code='$to']");
 
-$conv_to_rate = $conv_to[0]['rate'];
-$conv_to_code = $conv_to[0]->code;
-$conv_to_curr = $conv_to[0]->curr;
-$conv_to_loc = $conv_to[0]->loc;
-
-
 // complete the conversion
-$result = $conv_from_rate * $conv_to_rate * $amnt;
+$result = $conv_from[0]['rate'] * $conv_to[0]['rate'] * $amnt;
 
-// generate xml output
+// generate xml output, inserting rate, code, curr, location values
 $dom = new DOMDocument();
 $dom->encoding = "UTF-8";
 $dom->xmlVersion = "1.0";
@@ -206,7 +260,7 @@ $dom->formatOutput = true;
 
 $root = $dom->createElement('conv');
 $at_node = $dom->createElement('at', gmdate("d M Y H:i", $rates_ts));
-$rate_node = $dom->createElement('rate', $conv_to_rate);
+$rate_node = $dom->createElement('rate', $conv_to[0]['rate']);
 $from_node = $dom->createElement('from');
 $to_node = $dom->createElement('to');
 
@@ -215,20 +269,20 @@ $root->appendChild($rate_node);
 $root->appendChild($from_node);
 $root->appendChild($to_node);
 
-$child_node_code = $dom->createElement('code', $conv_from_code);
+$child_node_code = $dom->createElement('code', $conv_from[0]->code);
 $from_node->appendChild($child_node_code);
-$child_node_curr = $dom->createElement('curr', $conv_from_curr);
+$child_node_curr = $dom->createElement('curr', $conv_from[0]->curr);
 $from_node->appendChild($child_node_curr);
-$child_node_loc = $dom->createElement('loc', $conv_from_loc);
+$child_node_loc = $dom->createElement('loc', $conv_from[0]->loc);
 $from_node->appendChild($child_node_loc);
 $child_node_amnt = $dom->createElement('amnt', $amnt);
 $from_node->appendChild($child_node_amnt);
 
-$child_node_code_2 = $dom->createElement('code', $conv_to_code);
+$child_node_code_2 = $dom->createElement('code', $conv_to[0]->code);
 $to_node->appendChild($child_node_code_2);
-$child_node_curr_2 = $dom->createElement('curr', $conv_to_curr);
+$child_node_curr_2 = $dom->createElement('curr', $conv_to[0]->curr);
 $to_node->appendChild($child_node_curr_2);
-$child_node_loc_2 = $dom->createElement('loc', $conv_to_loc);
+$child_node_loc_2 = $dom->createElement('loc', $conv_to[0]->loc);
 $to_node->appendChild($child_node_loc_2);
 $child_node_amnt_2 = $dom->createElement('amnt', $result);
 $to_node->appendChild($child_node_amnt_2);
@@ -237,6 +291,7 @@ $dom->appendChild($root);
 
 // generate json output if required
 if (!empty($format) && ($format == 'json')){
+
   // access data to generate json 
   $data = $dom->saveXML();
   // load xml data into xml data object
@@ -256,19 +311,12 @@ else{
 
 echo '1500: Error in service';
 
-Try to improve code by adding xpath (week7)
-Should I keep "live" attributes?
-Are we using GBP only as from
-
-Add constants
-
 json error doesn't show root
-
-compare with prakash code example
 
 change code for localhost instead of localhost:8000
 
-open xml system error? L146
+open xml error would be a system error?
+
 
 */
 ?>
