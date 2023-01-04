@@ -3,7 +3,6 @@ session_start();
 // include config data
 include('../config.php'); 
 
-
 function getRate($symbol){
 
     $curl = curl_init();
@@ -31,13 +30,42 @@ function getRate($symbol){
     // Error 2300 - No rate listed for this currency
     $response = get_object_vars($data);
     if(array_key_exists('error', $response) && $response['error']->code == '202'){
-      echo 'Error 2300 - No rate listed for this currency';
+      generateErrorm('2300');;
       exit();
     }
 
     $rate = $data->rates->$symbol;
     return $rate;
 }
+
+function generateErrorm($err_code){
+
+  // generate xml error output
+  $dom_err = new DOMDocument();
+  $dom_err->encoding = "UTF-8";
+  $dom_err->xmlVersion = "1.0";
+  $dom_err->formatOutput = true;
+
+  $err_root = $dom_err->createElement('action');
+  $err_attr = new DOMAttr('type', 'tttt');
+  $err_root->setAttributeNode($err_attr);
+
+  $err_node = $dom_err->createElement('error');  
+  $err_root->appendChild($err_node);
+
+  $child_node_code = $dom_err->createElement('code', $err_code);  
+  $child_node_msg = $dom_err->createElement('msg', ERRMESSAGES2[$err_code]); 
+
+  $err_node->appendChild($child_node_code);
+  $err_node->appendChild($child_node_msg);
+
+  $dom_err->appendChild($err_root);
+
+  // display xml output
+  echo '<pre>' . $dom_err->saveXML() . '</pre>';
+
+}
+
 
 // ensure base file exist - if true, get values
 if (file_exists('../rates.xml')){
@@ -53,21 +81,19 @@ $xml = simplexml_load_file("../rates.xml") or die ("Error: Cannot load rates fil
 // ERROR HANDLING
 
 if (empty($action) || !in_array($action, ACTIONS)){
-    echo 'Error 2000 - Action not recognized or is missing';
+    generateErrorm('2000');;
     exit();
 }
 
 if (empty($cur) || !ctype_upper($cur) || strlen($cur) != 3){
-    echo 'ERROR 2100 - Currency code in wrong format or is missing';
+    generateErrorm('2100');
     exit();
 }
 
 if ($cur == BASE){
-    echo 'ERROR 2400 - Cannot update base currency';
+    generateErrorm('2400');
     exit();
 }
-
-
 
 // PUT
 /*generate a call to the external rate service and 
@@ -78,12 +104,12 @@ if($action == 'put'){
     // ERROR 2200 - check if the currency in rates.xml and live 
     $element = $xml->xpath("./currency[code = '$cur']");
     if(empty($element)){
-      echo 'ERROR 2200 - Currency code not found for update';
+      generateErrorm('2200');
       exit();
     } else{
       $attr = $element[0]->attributes()->live; 
       if($attr == '0'){
-        echo 'ERROR 2200 - Currency code not found for update';
+        generateErrorm('2200');
         exit();
       }
     }
@@ -99,7 +125,7 @@ if($action == 'put'){
     
     // update rate attribute
     $cur_to_update[0]['rate'] = $new_rate;
-    $xml->asXMl('../rates.xml');
+    $xml->asXMl('../rate.xml');
 
     // generate response xml
     $dom = new DOMDocument();
@@ -141,22 +167,55 @@ new record in the xml
 
 if($action == 'post'){
 
+  // ERROR 2200 - check if the currency in rates.xml and live 
+  $element = $xml->xpath("./currency[code = '$cur']");
+  if(empty($element)){
+    generateErrorm('2200');
+    exit();
+  }
+
   // get currency rate and value for the currency
+  $cur_to_insert = $xml->xpath("/rates/currency[code='$cur']");
 
-
+  // generate call to API  
+  $cur_rate = getRate($cur);
 
   // update rates.xml + set attribute to live
-
-
+  $cur_to_insert[0]['rate'] = $cur_rate;
+  $cur_to_insert[0]['live'] = '1';
+  $xml->asXMl('../rate.xml');
 
   // generate response xml 
 
+  $dom = new DOMDocument();
+  $dom->encoding = "UTF-8";
+  $dom->xmlVersion = "1.0";
+  $dom->formatOutput = true;  
+
+  $root = $dom->createElement('action');
+  $type_attr = new DOMAttr('type', 'post');
+  $root->setAttributeNode($type_attr);
+
+  $at_node = $dom->createElement('at', date("d M Y H:i"));
+  $rate_node = $dom->createElement('rate', $cur_to_insert[0]['rate']);
+  $curr_node = $dom->createElement('curr');
+
+  $root->appendChild($at_node);
+  $root->appendChild($rate_node);
+  $root->appendChild($curr_node);
+
+  $child_node_code = $dom->createElement('code', $cur_to_insert[0]->code);
+  $curr_node->appendChild($child_node_code);
+  $child_node_name = $dom->createElement('name',$cur_to_insert[0]->curr);
+  $curr_node->appendChild($child_node_name);
+  $child_node_loc = $dom->createElement('loc', $cur_to_insert[0]->loc);
+  $curr_node->appendChild($child_node_loc);
+
+  $dom->appendChild($root);
+
+  echo '<pre>' . $dom->saveXML() . '</pre>';
 
 }
-
-
-
-
 
 // DELETE
 /* Make the currency unavailable to the service - change live attr*/
@@ -169,7 +228,7 @@ if($action == 'del'){
   // update live attribute to 0
   $cur_to_delete[0]['live'] = '0';
 
-  $xml->asXMl('../rates.xml');
+  $xml->asXMl('../rate.xml');
 
   // generate response xml
   $dom = new DOMDocument();
@@ -194,7 +253,18 @@ if($action == 'del'){
 }
 
 /*
-Set AUD back to live
+
+delete rate.xml and change back to rates.xml
+error in service
+set xml heading for response
+add generating errors
+check if I can use anything from config
+tidy up code
+
+Check if all the appropriate error mesagges generated
+Does DEL method need additional error handling? ERROR 2200? if yes, check if can be generic outside of if statmenet
+
+
 */
 
 ?>
