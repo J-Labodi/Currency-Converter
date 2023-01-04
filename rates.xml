@@ -35,7 +35,7 @@
         <curr>Argentine Peso</curr>
         <loc>Argentina</loc>
     </currency>
-    <currency rate="1.77944" live="1">
+    <currency rate="1.755628" live="1">
         <code>AUD</code>
         <curr>Australian Dollar</curr>
         <loc>Australia, Christmas Island, Cocos (Keeling) Islands (The), Heard Island And Mcdonald
@@ -567,7 +567,7 @@
         <curr>Kina</curr>
         <loc>Papua New Guinea</loc>
     </currency>
-    <currency rate="66.903932" live="1">
+    <currency rate="67.378259" live="1">
         <code>PHP</code>
         <curr>Philippine Peso</curr>
         <loc>Philippines (The)</loc>
@@ -747,7 +747,7 @@
         <curr>Uganda Shilling</curr>
         <loc>Uganda</loc>
     </currency>
-    <currency rate="1.19653" live="1">
+    <currency rate="1.20635" live="1">
         <code>USD</code>
         <curr>US Dollar</curr>
         <loc>American Samoa, Bonaire, Sint Eustatius And Saba, British Indian Ocean Territory (The),

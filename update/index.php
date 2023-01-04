@@ -28,6 +28,13 @@ function getRate($symbol){
     $data = json_decode(curl_exec($curl));
     curl_close($curl);
 
+    // Error 2300 - No rate listed for this currency
+    $response = get_object_vars($data);
+    if(array_key_exists('error', $response) && $response['error']->code == '202'){
+      echo 'Error 2300 - No rate listed for this currency';
+      exit();
+    }
+
     $rate = $data->rates->$symbol;
     return $rate;
 }
@@ -55,13 +62,9 @@ if (empty($cur) || !ctype_upper($cur) || strlen($cur) != 3){
     exit();
 }
 
-// ERROR 2200 - check if the currency within live currencies of rates 
-if($cur){
-
-
-
-
-  
+if ($cur == BASE){
+    echo 'ERROR 2400 - Cannot update base currency';
+    exit();
 }
 
 
@@ -71,12 +74,31 @@ if($cur){
 update the rate value for the specific currency in the xml file
 */
 if($action == 'put'){
-    // generate call to API - update rate and live attr in rates.xml
+
+    // ERROR 2200 - check if the currency in rates.xml and live 
+    $element = $xml->xpath("./currency[code = '$cur']");
+    if(empty($element)){
+      echo 'ERROR 2200 - Currency code not found for update';
+      exit();
+    } else{
+      $attr = $element[0]->attributes()->live; 
+      if($attr == '0'){
+        echo 'ERROR 2200 - Currency code not found for update';
+        exit();
+      }
+    }
+
+    // access currency 
     $cur_to_update = $xml->xpath("/rates/currency[code='$cur']");
+
     // store old rate 
     $old_rate = (string) $cur_to_update[0]['rate'];
-    // update rate and live attribute
-    $cur_to_update[0]['rate'] = getRate($cur);
+
+    // generate call to API  
+    $new_rate = getRate($cur);
+    
+    // update rate attribute
+    $cur_to_update[0]['rate'] = $new_rate;
     $xml->asXMl('../rates.xml');
 
     // generate response xml
@@ -113,24 +135,41 @@ if($action == 'put'){
 }
 
 // POST 
-/* get the currency rate and value for a new currency an insert the
+/* get the currency rate and value for a new currency and insert the
 new record in the xml
 */
 
+if($action == 'post'){
+
+  // get currency rate and value for the currency
+
+
+
+  // update rates.xml + set attribute to live
+
+
+
+  // generate response xml 
+
+
+}
 
 
 
 
 
 // DELETE
-/* Make the currency unavailable to the service*/
-
-global $blacklist;
-$blacklist = array(); 
+/* Make the currency unavailable to the service - change live attr*/
 
 if($action == 'del'){
 
+  // access currency
   $cur_to_delete = $xml->xpath("/rates/currency[code='$cur']");
+
+  // update live attribute to 0
+  $cur_to_delete[0]['live'] = '0';
+
+  $xml->asXMl('../rates.xml');
 
   // generate response xml
   $dom = new DOMDocument();
@@ -150,9 +189,12 @@ if($action == 'del'){
 
   $dom->appendChild($root);
 
-  array_push($blacklist, $cur);
-
   echo '<pre>' . $dom->saveXML() . '</pre>';
 
 }
+
+/*
+Set AUD back to live
+*/
+
 ?>
