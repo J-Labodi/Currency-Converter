@@ -204,7 +204,7 @@ if (!in_array($from, LIVE) || !in_array($to, LIVE)){
 }
 
 // ensure provided amount is decimal number - Error 1300
-if (is_numeric($amnt) && strpos($amnt, '.') === false){
+if (!is_numeric($amnt) || strpos($amnt, '.') === false){
   generateErrorm("1300");
   exit();
 }
@@ -329,7 +329,6 @@ ERROR 1200 maybe check for live attribute 1 or 0
 add extra layer of error handling to cover updates -> check if needed in TASK C
 
 TEST
-
 
 change APi request to all the available qurrencies 
 
