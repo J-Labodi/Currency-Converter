@@ -1,17 +1,17 @@
 <?php
 session_start();
-
 // include config data
 include('config.php'); 
 
-
+// callAPI function to call external exchange service - Fixer API
 function callAPI(){
-
   $curl = curl_init();
 
+  // access base currency and initial live currencies for the URL parameters
   $base = constant("BASE");
   $symbols = implode(",", LIVE);
 
+  // details of API request
   curl_setopt_array($curl, array(
     CURLOPT_URL => "https://api.apilayer.com/fixer/latest?symbols={$symbols}&base={$base}",
     CURLOPT_HTTPHEADER => array(
@@ -27,31 +27,32 @@ function callAPI(){
     CURLOPT_CUSTOMREQUEST => "GET"
   ));
 
+  // retain current rates as JSON
   $rates = curl_exec($curl);
   curl_close($curl);
 
   // convert rates to associative array 
-  $assoc_array = json_decode($rates, true);
+  $response = json_decode($rates, true);
 
-  // define rates as global
-  global $response;
-  $response = $assoc_array;
-  
+  return $response;
 }
 
+// generateErrorm function to generate error messages
 function generateErrorm($err_code){
-
-  // generate xml error output
+  // generate xml error output with DOMDocument class - define XML prolog
   $dom_err = new DOMDocument();
   $dom_err->encoding = "UTF-8";
   $dom_err->xmlVersion = "1.0";
   $dom_err->formatOutput = true;
 
+  // create root and its child element
   $err_root = $dom_err->createElement('conv');
   $err_node = $dom_err->createElement('error');  
 
   $err_root->appendChild($err_node);
 
+  /* create sub elements - insert the value of $err_code 
+  and the corresponding message from ERRMESSAGES constant */
   $child_node_code = $dom_err->createElement('code', $err_code);  
   $child_node_msg = $dom_err->createElement('msg', ERRMESSAGES[$err_code]); 
 
@@ -60,40 +61,41 @@ function generateErrorm($err_code){
 
   $dom_err->appendChild($err_root);
 
-  // generate json output if required
+  // generate JSON output if requested
   global $format;
   if (!empty($format) && ($format == 'json')){
-    // access data to generate json 
+    // retain data to generate JSON
     $data_err = $dom_err->saveXML();
     // load xml data into xml data object
     $xmldata_err = simplexml_load_string($data_err);
-    // encode xml data into json
+    // encode xml data into JSON format
     $jsondata_err = json_encode($xmldata_err, JSON_PRETTY_PRINT);
-    // display json output
+    // display JSON output
     echo '<pre>' . $jsondata_err . '</pre>';
-  }
-  else{
+  } else{
     // display xml output
     echo '<pre>' . $dom_err->saveXML() . '</pre>';
   }    
 }
 
+// generateRatesXML function to generate rates.xml file
 function generateRatesXML(){
-
   // get the iso currencies xml file
   $iso_xml = simplexml_load_file(ISO_XML) or die("Error: Cannot load currencies file");   
   // get all the currency codes
   $iso_codes = $iso_xml->xpath("//CcyNtry/Ccy");
 
+  /* load each currency codes to array, 
+  remove duplicates and retain the unique codes */
   $codes=[];
-  foreach ($iso_codes as $code) {
+  foreach ($iso_codes as $code){
     $codes[] = (string) $code;
   }
   $codes = array_unique($codes);
 
   // create an array of unique (sorted) codes
-  foreach ($iso_codes as $code) {
-    if (!in_array($code, $codes)) {
+  foreach ($iso_codes as $code){
+    if (!in_array($code, $codes)){
       $codes[] = (string) $code;
     }
   }
@@ -108,7 +110,7 @@ function generateRatesXML(){
   $writer->writeAttribute('ts', '0');
   $writer->writeAttribute('base', BASE);
 
-  foreach ($codes as $code) { 
+  foreach ($codes as $code){ 
 
     // pull all currencies that matches the current code
     $nodes = $iso_xml->xpath("//Ccy[.='$code']/parent::*");
@@ -116,15 +118,15 @@ function generateRatesXML(){
     // get the code value from the first entry 
     $cname =  $nodes[0]->CcyNm;
 
+    // write element and its rate attribute
     $writer->startElement('currency');
-    
     $writer->writeAttribute('rate', '');
     
-        
-    if (in_array($code, LIVE)) {
+    /* write attribute value
+    depending on the currency defintion as a live curency */
+    if (in_array($code, LIVE)){
       $writer->writeAttribute('live', 1);
-    }
-    else {
+    } else{
       $writer->writeAttribute('live', 0);
     }
     
@@ -143,7 +145,7 @@ function generateRatesXML(){
     and lowercase first letter in name and 
     then write it out with the first letter upper-cased
     */
-    foreach ($nodes as $index=>$node) {
+    foreach ($nodes as $index=>$node){
       $writer->text(mb_convert_case($node->CtryNm, MB_CASE_TITLE, "UTF-8"));
       if ($index!=$last) {$writer->text(', ');}
     }
@@ -171,7 +173,8 @@ if (!file_exists('rates.xml')){
 // get parameters from query string 
 extract($_GET);
 
-// ensure parameters in query string are valid
+/* Error Handling
+ensure parameters in query string are valid - Error 1100 */
 if ($_GET){
   $queries = array();
   parse_str($_SERVER['QUERY_STRING'], $queries);
@@ -180,63 +183,65 @@ if ($_GET){
   /* compare parameters from query string 
   to supported parameters */
   $diff = array_diff($queries, PARAMS);
+
+  // generate error if there is a difference
   if (count($diff) > 0){
     generateErrorm("1100");
     exit();
   }
 }
 
-// ensure required parameters are provided 
+// ensure required parameters are provided - Error 1000 
 if (empty($from) || empty($to) || empty($amnt)){
   generateErrorm("1000");
   exit();
 }
 
-// ensure provided currency type is supported
+// ensure provided currency type is supported - Error 1200
 if (!in_array($from, LIVE) || !in_array($to, LIVE)){
   generateErrorm("1200");
   exit();
 }
 
-// ensure provided amount decimal number
+// ensure provided amount is decimal number - Error 1300
 if (is_numeric($amnt) && strpos($amnt, '.') === false){
   generateErrorm("1300");
   exit();
 }
 
-// ensure provided format is supported
+// ensure provided format is supported - Error 1400
 if (!empty($format) && !in_array($format, FORMATS)){
   generateErrorm("1400");
   exit();
 }
 
-// load rates.xml with simpleXML
+// load rates.xml file with simpleXML
 $xml = simplexml_load_file("rates.xml") or die ("Error: Cannot load rates file");
 
-// ensure data is older than 12 hours
+// compare timestamp from rates.xml with current time  
 $t = time();
 $rates_ts = (int) $xml['ts'];
 $time_diff = $t - $rates_ts;
 
-// update rate in rates.xml
+// update rate in rates.xml if data is older than 12 hours (Unix 43200)
 if($time_diff > 43200){  
-
-  // utilise callAPI() function
-  callAPI();
+  // utilise callAPI function to get current rates
+  $curr_rates = callAPI();
 
   // update currency rates in rates.xml
   $rate_att = 'rate';
-  foreach ($response['rates'] as $k => $v){
+  foreach ($curr_rates['rates'] as $k => $v){
     // access node from rates.xml file
     $node = $xml->xpath("./currency[code = '$k']");
 
     // update rate 
     $node[0]->attributes()->rate = $v;
-
+    
+    // save well-formed xml string 
     $xml->asXMl('rates.xml');
   }
 
-  // update timestamp
+  // update timestamp in rates.xml and retain it in $rates_ts
   $ts_att = 'ts';
   $xml->attributes()->$ts_att = time();
   $xml->asXMl('rates.xml');
@@ -245,30 +250,32 @@ if($time_diff > 43200){
 
 // access element to complete conversion from
 $conv_from = $xml->xpath("/rates/currency[code='$from']");
-
 // access element to complete conversion to
 $conv_to = $xml->xpath("/rates/currency[code='$to']");
 
 // complete the conversion
 $result = $conv_from[0]['rate'] * $conv_to[0]['rate'] * $amnt;
 
-// generate xml output, inserting rate, code, curr, location values
+// generate xml output
 $dom = new DOMDocument();
 $dom->encoding = "UTF-8";
 $dom->xmlVersion = "1.0";
 $dom->formatOutput = true;
 
+// create xml elements with ts and rate values
 $root = $dom->createElement('conv');
 $at_node = $dom->createElement('at', gmdate("d M Y H:i", $rates_ts));
 $rate_node = $dom->createElement('rate', $conv_to[0]['rate']);
 $from_node = $dom->createElement('from');
 $to_node = $dom->createElement('to');
 
+// append elements to root
 $root->appendChild($at_node);
 $root->appendChild($rate_node);
 $root->appendChild($from_node);
 $root->appendChild($to_node);
 
+// create child nodes with appropriate code, curr, loc, amnt, result values
 $child_node_code = $dom->createElement('code', $conv_from[0]->code);
 $from_node->appendChild($child_node_code);
 $child_node_curr = $dom->createElement('curr', $conv_from[0]->curr);
@@ -289,33 +296,42 @@ $to_node->appendChild($child_node_amnt_2);
 
 $dom->appendChild($root);
 
-// generate json output if required
+// generate JSON output if requested
 if (!empty($format) && ($format == 'json')){
-
-  // access data to generate json 
+  // retain data to generate JSON 
   $data = $dom->saveXML();
   // load xml data into xml data object
   $xmldata = simplexml_load_string($data);
-  // encode xml data into json
+  // encode xml data into JSON format
   $jsondata = json_encode($xmldata, JSON_PRETTY_PRINT);
-  // display json output
+  // display JSON output
   echo '<pre>' . $jsondata . '</pre>';
-}
-else{
+} else{
   // display xml output
   echo '<pre>' . $dom->saveXML() . '</pre>';
 }
 
 
 /*
+TODO
 
 echo '1500: Error in service';
 
 json error doesn't show root
 
+remove pre tags before displaying generated file, sort header issue
+
 change code for localhost instead of localhost:8000
 
 open xml error would be a system error?
+
+ERROR 1200 maybe check for live attribute 1 or 0
+add extra layer of error handling to cover updates -> check if needed in TASK C
+
+TEST
+
+
+change APi request to all the available qurrencies 
 
 
 */
