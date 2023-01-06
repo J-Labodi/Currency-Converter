@@ -3,6 +3,9 @@ session_start();
 // include config data
 include('../config.php'); 
 
+// set header to xml content type
+header("Content-type: text/xml");
+
 function getRate($symbol){
     $curl = curl_init();
   
@@ -54,7 +57,14 @@ function generateErrorm($err_code){
 
   // create root element and set its attribute 
   $err_root = $dom_err->createElement('action');
-  $err_attr = new DOMAttr('type', 'tttt');
+
+  // define type attribute based on error code
+  if ($err_code == '2000'){
+    $err_attr = new DOMAttr('type', 'NULL');
+  } else{
+    $err_attr = new DOMAttr('type', 'tttt');
+  }
+  
   $err_root->setAttributeNode($err_attr);
 
   // create child element and append it
@@ -72,7 +82,7 @@ function generateErrorm($err_code){
   $dom_err->appendChild($err_root);
 
   // display xml output
-  echo '<pre>' . $dom_err->saveXML() . '</pre>';
+  echo $dom_err->saveXML();
 }
 
 // get parameters from query string 
@@ -84,7 +94,7 @@ $xml = simplexml_load_file("../rates.xml") or die ("Error: Cannot load rates fil
 /* Error Handling
 ensure value of action is provided and valid - Error 2000 */
 if (empty($action) || !in_array($action, ACTIONS)){
-    generateErrorm('2000');;
+    generateErrorm('2000');
     exit();
 }
 
@@ -171,7 +181,7 @@ if($action == 'put'){
     $dom->appendChild($root);
 
     // display xml output
-    echo '<pre>' . $dom->saveXML() . '</pre>';
+    echo $dom->saveXML();
 }
 
 /* 
@@ -234,7 +244,7 @@ if($action == 'post'){
   $dom->appendChild($root);
 
   // display xml output
-  echo '<pre>' . $dom->saveXML() . '</pre>';
+  echo $dom->saveXML();
 }
 
 /* 
@@ -271,25 +281,16 @@ if($action == 'del'){
   $dom->appendChild($root);
 
   // display xml output
-  echo '<pre>' . $dom->saveXML() . '</pre>';
+  echo $dom->saveXML();
 }
-
 /*
-
-error in service 2500
-
 check if I can use anything from config
 
-Check if all the appropriate error mesagges generated
 Does DEL method need additional error handling? ERROR 2200? if yes, check if can be generic outside of if statmenet
-
-delete pre tags of output, sort heading issue
 
 reset rates.xml before submission
 
-why xml prolog is commented out when inspect
-
-NULL value for attribute if it is not set
+is it NULL or empty string? if action is provided but not reocgnized? same NULL?
 
 */
 ?>

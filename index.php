@@ -7,9 +7,8 @@ include('config.php');
 function callAPI(){
   $curl = curl_init();
 
-  // access base currency and initial live currencies for the URL parameters
+  // access base currency for the URL parameter
   $base = constant("BASE");
-  $symbols = implode(",", LIVE);    
 
   // details of API request
   curl_setopt_array($curl, array(
@@ -355,8 +354,6 @@ open xml error would be a system error?
 json error doesn't show root
 
 reset rates.xml before submission
-
-TEST
 
 */
 ?>
