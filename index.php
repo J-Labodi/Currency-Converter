@@ -9,11 +9,11 @@ function callAPI(){
 
   // access base currency and initial live currencies for the URL parameters
   $base = constant("BASE");
-  $symbols = implode(",", LIVE);
+  $symbols = implode(",", LIVE);    
 
   // details of API request
   curl_setopt_array($curl, array(
-    CURLOPT_URL => "https://api.apilayer.com/fixer/latest?symbols={$symbols}&base={$base}",
+    CURLOPT_URL => "https://api.apilayer.com/fixer/latest?base={$base}",
     CURLOPT_HTTPHEADER => array(
       "Content-Type: text/plain",
       "apikey: Dq3fsfF37Akclavu8mqrD3R723E4KOJm"
@@ -173,6 +173,9 @@ if (!file_exists('rates.xml')){
 // get parameters from query string 
 extract($_GET);
 
+// load rates.xml file with simpleXML
+$xml = simplexml_load_file("rates.xml") or die ("Error: Cannot load rates file");
+
 /* Error Handling
 ensure parameters in query string are valid - Error 1100 */
 if ($_GET){
@@ -197,8 +200,36 @@ if (empty($from) || empty($to) || empty($amnt)){
   exit();
 }
 
-// ensure provided currency type is supported - Error 1200
-if (!in_array($from, LIVE) || !in_array($to, LIVE)){
+// ensure provided currencies are supported (appropriate format) - Error 1200
+if (!ctype_upper($from) || strlen($from) != 3){
+  generateErrorm('1200');
+  exit();
+}
+
+if (!ctype_upper($to) || strlen($to) != 3){
+  generateErrorm('1200');
+  exit();
+}
+
+/* ensure provided currencies are supported 
+(whether currencies exist in rates.xml) - Error 1200 */
+
+// access from and to currencies from rates.xml file
+$curr_from = $xml->xpath("./currency[code = '$from']");
+$curr_to = $xml->xpath("./currency[code = '$to']");
+
+// generate error message if variables are empty
+if (empty($curr_from) || empty($curr_to)){
+  generateErrorm("1200");
+  exit();
+}
+
+// ensure provided currencies are active (live == '1') - Error 1200
+$from_live = $curr_from[0]->attributes()->live;
+$to_live = $curr_to[0]->attributes()->live;
+
+// generate error message if live attributes equal to 0 - inactive currencies
+if ($from_live == '0'|| $to_live == '0'){
   generateErrorm("1200");
   exit();
 }
@@ -215,16 +246,13 @@ if (!empty($format) && !in_array($format, FORMATS)){
   exit();
 }
 
-// load rates.xml file with simpleXML
-$xml = simplexml_load_file("rates.xml") or die ("Error: Cannot load rates file");
-
 // compare timestamp from rates.xml with current time  
 $t = time();
 $rates_ts = (int) $xml['ts'];
 $time_diff = $t - $rates_ts;
 
 // update rate in rates.xml if data is older than 12 hours (Unix 43200)
-if($time_diff > 43200){  
+if ($time_diff > 43200){  
   // utilise callAPI function to get current rates
   $curr_rates = callAPI();
 
@@ -234,8 +262,13 @@ if($time_diff > 43200){
     // access node from rates.xml file
     $node = $xml->xpath("./currency[code = '$k']");
 
-    // update rate 
-    $node[0]->attributes()->rate = $v;
+    // ensure pulled currency is in rates.xml (API provides crypto rates as well)
+    if (!empty($node)){
+      // update rate if valid currency
+      $node[0]->attributes()->rate = $v;
+    } else{
+      continue;
+    }
     
     // save well-formed xml string 
     $xml->asXMl('rates.xml');
@@ -330,7 +363,6 @@ add extra layer of error handling to cover updates -> check if needed in TASK C
 
 TEST
 
-change APi request to all the available qurrencies 
 
 
 */
