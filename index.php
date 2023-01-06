@@ -63,18 +63,16 @@ function generateErrorm($err_code){
 
   // generate JSON output if requested
   global $format;
-  if (!empty($format) && ($format == 'json')){
+  if (!empty($format) && $format == 'json'){
     // retain data to generate JSON
     $data_err = $dom_err->saveXML();
     // load xml data into xml data object
     $xmldata_err = simplexml_load_string($data_err);
-    // encode xml data into JSON format
-    $jsondata_err = json_encode($xmldata_err, JSON_PRETTY_PRINT);
-    // display JSON output
-    echo '<pre>' . $jsondata_err . '</pre>';
+    // display JSON output (encoded xml data)
+    echo json_encode($xmldata_err, JSON_PRETTY_PRINT);
   } else{
     // display xml output
-    echo '<pre>' . $dom_err->saveXML() . '</pre>';
+    echo $dom_err->saveXML();
   }    
 }
 
@@ -172,6 +170,13 @@ if (!file_exists('rates.xml')){
 
 // get parameters from query string 
 extract($_GET);
+
+// set header based on requested format 
+if (!empty($format) && $format == 'json'){
+  header('Content-Type: application/json; charset=utf-8');
+} else{
+  header("Content-type: text/xml");
+}
 
 // load rates.xml file with simpleXML
 $xml = simplexml_load_file("rates.xml") or die ("Error: Cannot load rates file");
@@ -330,40 +335,28 @@ $to_node->appendChild($child_node_amnt_2);
 $dom->appendChild($root);
 
 // generate JSON output if requested
-if (!empty($format) && ($format == 'json')){
+if (!empty($format) && $format == 'json'){
   // retain data to generate JSON 
   $data = $dom->saveXML();
   // load xml data into xml data object
   $xmldata = simplexml_load_string($data);
-  // encode xml data into JSON format
-  $jsondata = json_encode($xmldata, JSON_PRETTY_PRINT);
-  // display JSON output
-  echo '<pre>' . $jsondata . '</pre>';
+  // display JSON output (encoded xml data)
+  echo json_encode($xmldata, JSON_PRETTY_PRINT);
 } else{
   // display xml output
-  echo '<pre>' . $dom->saveXML() . '</pre>';
+  echo $dom->saveXML();
 }
-
-
 /*
 TODO
 
 echo '1500: Error in service';
+open xml error would be a system error?
 
 json error doesn't show root
 
-remove pre tags before displaying generated file, sort header issue
-
-change code for localhost instead of localhost:8000
-
-open xml error would be a system error?
-
-ERROR 1200 maybe check for live attribute 1 or 0
-add extra layer of error handling to cover updates -> check if needed in TASK C
+reset rates.xml before submission
 
 TEST
-
-
 
 */
 ?>

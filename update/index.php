@@ -79,7 +79,7 @@ function generateErrorm($err_code){
 extract($_GET);
 
 // load rates.xml file with simpleXML
-$xml = simplexml_load_file("../rate.xml") or die ("Error: Cannot load rates file");
+$xml = simplexml_load_file("../rates.xml") or die ("Error: Cannot load rates file");
 
 /* Error Handling
 ensure value of action is provided and valid - Error 2000 */
@@ -134,7 +134,7 @@ if($action == 'put'){
     
     // update rate attribute with current rate
     $cur_to_update[0]['rate'] = $new_rate;
-    $xml->asXMl('../rate.xml');
+    $xml->asXMl('../rates.xml');
 
     // generate response xml
     $dom = new DOMDocument();
@@ -199,7 +199,7 @@ if($action == 'post'){
   set the value of live attribute to 1 - active currency */
   $cur_to_insert[0]['rate'] = $cur_rate;
   $cur_to_insert[0]['live'] = '1';
-  $xml->asXMl('../rate.xml');
+  $xml->asXMl('../rates.xml');
 
   // generate response xml 
   $dom = new DOMDocument();
@@ -246,7 +246,7 @@ if($action == 'del'){
 
   // update live attribute of the currency to 0 - inactive currency
   $cur_to_delete[0]['live'] = '0';
-  $xml->asXMl('../rate.xml');
+  $xml->asXMl('../rates.xml');
 
   // generate response xml
   $dom = new DOMDocument();
@@ -276,10 +276,8 @@ if($action == 'del'){
 
 /*
 
-rate.xml and change back to rates.xml
 error in service 2500
-set xml heading for response
-add generating errors
+
 check if I can use anything from config
 
 Check if all the appropriate error mesagges generated
@@ -287,6 +285,11 @@ Does DEL method need additional error handling? ERROR 2200? if yes, check if can
 
 delete pre tags of output, sort heading issue
 
-*/
+reset rates.xml before submission
 
+why xml prolog is commented out when inspect
+
+NULL value for attribute if it is not set
+
+*/
 ?>

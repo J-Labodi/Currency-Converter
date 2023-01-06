@@ -44,6 +44,4 @@ define('ERRMESSAGES2', array(
        "2400" => "Cannot update base currency",
        "2500" => "Error in service"
 ));
-
 ?>
-
