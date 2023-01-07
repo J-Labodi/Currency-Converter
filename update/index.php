@@ -110,27 +110,26 @@ if ($cur == BASE){
     exit();
 }
 
+/* ensure provided currency code is available for update - Error 2200 
+load elements of currency from rates.xml */
+$currency = $xml->xpath("./currency[code = '$cur']");
+// generate error if $currency is empty - currency not found
+if(empty($currency)){
+  generateErrorm('2200');
+  exit();
+}
+
 /*
 PUT functionality
 generate a call to the external rate service and 
 update the rate value for the specific currency within the rates.xml file */
 if($action == 'put'){
-    /* Error Handling
-    ensure provided currency code is available for update - Error 2200 
-    load elements of currency from rates.xml */
-    $currency = $xml->xpath("./currency[code = '$cur']");
-    // generate error if $currency is empty - currency not found
-    if(empty($currency)){
+    /* generate error if currency found 
+    but its live attribute set to 0 (inactive currency) - Error 2200 */
+    $attr = $currency[0]->attributes()->live; 
+    if($attr == '0'){
       generateErrorm('2200');
       exit();
-    } else{
-      /* generate error if currency found 
-      but its live attribute set to 0 - inactive currency */
-      $attr = $currency[0]->attributes()->live; 
-      if($attr == '0'){
-        generateErrorm('2200');
-        exit();
-      }
     }
 
     // access currency from rates.xml to update
@@ -189,16 +188,6 @@ POST functionality
 get the currency rate and value for a new currency and 
 insert the new record into the rates.xml file */
 if($action == 'post'){
-  /* Error Handling
-  ensure provided currency code is available for update - Error 2200 
-  load elements of currency from rates.xml */
-  $currency = $xml->xpath("./currency[code = '$cur']");
-  // generate error if $currency is empty - currency not found
-  if(empty($currency)){
-    generateErrorm('2200');
-    exit();
-  }
-
   // access currency from rates.xml to update
   $cur_to_insert = $xml->xpath("/rates/currency[code='$cur']");
 
@@ -284,9 +273,6 @@ if($action == 'del'){
   echo $dom->saveXML();
 }
 /*
-check if I can use anything from config
-
-Does DEL method need additional error handling? ERROR 2200? if yes, check if can be generic outside of if statmenet
 
 reset rates.xml before submission
 
