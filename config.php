@@ -15,7 +15,8 @@ define('LIVE', array(
        "THB", "TRY", "USD", "ZAR"
 ));
 
-// define constant - error messages
+/* define constant - error messages
+Error 1500 reserved for server related issues */
 define('ERRMESSAGES', array(
        "1000" => "Required parameter is missing",
        "1100" => "Parameter not recognized",
@@ -35,7 +36,8 @@ define('BASE', 'GBP');
 // define constant - supported actions of update functionality
 define('ACTIONS', array("put", "post", "del"));
 
-// define constant - error messages of update functionality
+/* define constant - error messages of update functionality 
+Error 2500 reserved for server related issues */
 define('ERRMESSAGES2', array(
        "2000" => "Action not recognized or is missing",
        "2100" => "Currency code in wrong format or is missing",

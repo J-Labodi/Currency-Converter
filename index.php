@@ -348,9 +348,6 @@ if (!empty($format) && $format == 'json'){
 /*
 TODO
 
-echo '1500: Error in service';
-open xml error would be a system error?
-
 json error doesn't show root
 
 reset rates.xml before submission
