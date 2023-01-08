@@ -15,9 +15,11 @@
       .myDiv {
         line-height: 30px;
       }
+      button {
+        cursor: pointer;
+      }
     </style>
     <script>
-
       var url;
       // do AJAX - it ain't rocket science
       function loadDoc(url) {
@@ -31,20 +33,74 @@
         xhttp.open("GET", url, true);
         xhttp.send();
       }
-      
-      function sendRequest() {
 
+      function sendRequest() {
         // get selected currency
 
-
         // get selected action
-        var action = document.querySelector("input[type='radio'][name=action]:checked").value;
+        var action = document.querySelector(
+          "input[type='radio'][name=action]:checked"
+        ).value;
         var e = document.getElementById("currency-dropdown");
         var currency = e.options[e.selectedIndex].value;
         console.log(currency);
 
-        url = 'index.php?cur=' + currency + '&action=' + action;
+        url = "index.php?cur=" + currency + "&action=" + action;
         loadDoc(url);
+      }
+
+      function refreshDropdown(radioVal){
+
+        dropdown.length = 0;
+
+        const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
+
+        const request = new XMLHttpRequest();
+        request.open("GET", url2, true);
+
+        request.onload = function () {
+          if (request.status === 200) {
+            parser = new DOMParser();
+            const xml = parser.parseFromString(request.responseText, "text/xml");
+          
+            // currency node
+            node = xml.getElementsByTagName("code");
+          
+            // live attribute
+            var attr = node[0].parentElement.getAttribute("live");
+          
+            let option;
+            for (let i = 0; i < node.length; i++) {
+              option = document.createElement("option");
+            
+              // if action is post and attribute is 0
+              if (radioVal == 'post'){
+                if (node[i].parentElement.getAttribute("live") == '0'){
+                option.text = node[i].childNodes[0].nodeValue;
+                option.value = node[i].childNodes[0].nodeValue;
+                dropdown.add(option);
+                }
+              }
+              if (radioVal == 'put' || radioVal == 'del'){
+              // if action PUT or DEl and attribute is 1
+                if (node[i].parentElement.getAttribute("live") == '1'){
+                option.text = node[i].childNodes[0].nodeValue;
+                option.value = node[i].childNodes[0].nodeValue;
+                dropdown.add(option);
+                }
+              }
+
+            }
+          } else {
+            // Reached the server, but it returned an error
+          }
+        };
+
+        request.onerror = function () {
+          console.error("An error occurred fetching the JSON from " + url2);
+        };
+
+        request.send();
       }
 
     </script>
@@ -54,11 +110,11 @@
     <div class="myDiv">
       <!-- radio buttons -->
       <label for="action">action:</label>
-      <input type="radio" id="put" name="action" value="put" />
+      <input type="radio" id="put" name="action" value="put" onclick="refreshDropdown(this.value)"/>
       <label for="put">PUT</label>
-      <input type="radio" id="post" name="action" value="post" />
+      <input type="radio" id="post" name="action" value="post" onclick="refreshDropdown(this.value)"/>
       <label for="post">POST</label>
-      <input type="radio" id="del" name="action" value="del" />
+      <input type="radio" id="del" name="action" value="del" onclick="refreshDropdown(this.value)"/>
       <label for="del">DEL</label>
       <br />
       <!-- dropdown list Example 4 -->
@@ -71,49 +127,50 @@
     <textarea id="xml_text"></textarea>
   </body>
   <script>
-      let dropdown = document.getElementById('currency-dropdown');
-      dropdown.length = 0;
+    let dropdown = document.getElementById("currency-dropdown");
+    dropdown.length = 0;
 
-      let defaultOption = document.createElement('option');
+    let defaultOption = document.createElement("option");
 
-      dropdown.selectedIndex = 0;
+    dropdown.selectedIndex = 0;
 
-      const url2 = 'http://localhost:8000/atwd1/assignment/rates.xml';
+    const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
 
-      const request = new XMLHttpRequest();
-      request.open('GET', url2, true);
+    const request = new XMLHttpRequest();
+    request.open("GET", url2, true);
 
-      request.onload = function() {
-        if (request.status === 200) {
-          parser = new DOMParser()
-          const xml = parser.parseFromString(request.responseText, 'text/xml');
+    request.onload = function () {
+      if (request.status === 200) {
+        parser = new DOMParser();
+        const xml = parser.parseFromString(request.responseText, "text/xml");
+
+        node = xml.getElementsByTagName("code");
+
+        var attr = node[0].parentElement.getAttribute("live");
+
+        let option;
+        for (let i = 0; i < node.length; i++) {
+          option = document.createElement("option");
+
+          // if action PUT or DEl and attribute is 1
+          option.text = node[i].childNodes[0].nodeValue;
+          option.value = node[i].childNodes[0].nodeValue;
+          dropdown.add(option);
+        
+          // if action is post and attribute is 0
+
           
-          node = xml.getElementsByTagName("code");
-
-          console.log(node);
-
-          //const data = JSON.parse(request.responseText);
-          let option;
-          for (let i = 0; i < node.length; i++) {
-            
-            option = document.createElement('option');
-            option.text = node[i].childNodes[0].nodeValue;
-            option.value = node[i].childNodes[0].nodeValue;
-            dropdown.add(option);
-
-          }
-          
-         } else {
-          // Reached the server, but it returned an error
-        }   
+        }
+      } else {
+        // Reached the server, but it returned an error
       }
+    };
 
-      request.onerror = function() {
-        console.error('An error occurred fetching the JSON from ' + url2);
-      };
+    request.onerror = function () {
+      console.error("An error occurred fetching the JSON from " + url2);
+    };
 
-      request.send();
-
+    request.send();
 
   </script>
 </html>

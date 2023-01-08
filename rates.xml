@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rates ts="1673020777" base="GBP">
-    <currency rate="4.425557" live="0">
+    <currency rate="4.441522" live="1">
         <code>AED</code>
         <curr>UAE Dirham</curr>
         <loc>United Arab Emirates (The)</loc>
     </currency>
-    <currency rate="106.638053" live="0">
+    <currency rate="107.027876" live="0">
         <code>AFN</code>
         <curr>Afghani</curr>
         <loc>Afghanistan</loc>
     </currency>
-    <currency rate="134.128685" live="0">
+    <currency rate="134.051392" live="1">
         <code>ALL</code>
         <curr>Lek</curr>
         <loc>Albania</loc>
@@ -20,7 +20,7 @@
         <curr>Armenian Dram</curr>
         <loc>Armenia</loc>
     </currency>
-    <currency rate="2.173423" live="0">
+    <currency rate="2.181374" live="1">
         <code>ANG</code>
         <curr>Netherlands Antillean Guilder</curr>
         <loc>Curaçao, Sint Maarten (Dutch Part)</loc>
@@ -101,7 +101,7 @@
         <curr>Mvdol</curr>
         <loc>Bolivia (Plurinational State Of)</loc>
     </currency>
-    <currency rate="6.326044" live="1">
+    <currency rate="6.319686" live="1">
         <code>BRL</code>
         <curr>Brazilian Real</curr>
         <loc>Brazil</loc>
@@ -131,7 +131,7 @@
         <curr>Belize Dollar</curr>
         <loc>Belize</loc>
     </currency>
-    <currency rate="1.623971" live="1">
+    <currency rate="1.626449" live="1">
         <code>CAD</code>
         <curr>Canadian Dollar</curr>
         <loc>Canada</loc>
@@ -166,7 +166,7 @@
         <curr>Chilean Peso</curr>
         <loc>Chile</loc>
     </currency>
-    <currency rate="8.239532" live="1">
+    <currency rate="8.269682" live="1">
         <code>CNY</code>
         <curr>Yuan Renminbi</curr>
         <loc>China</loc>
@@ -241,7 +241,7 @@
         <curr>Ethiopian Birr</curr>
         <loc>Ethiopia</loc>
     </currency>
-    <currency rate="1.136478" live="1">
+    <currency rate="1.134022" live="1">
         <code>EUR</code>
         <curr>Euro</curr>
         <loc>Åland Islands, Andorra, Austria, Belgium, Croatia, Cyprus, Estonia, European Union,
