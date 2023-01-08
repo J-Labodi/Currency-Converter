@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rates ts="1673020777" base="GBP">
-    <currency rate="4.441522" live="1">
+    <currency rate="4.441517" live="1">
         <code>AED</code>
         <curr>UAE Dirham</curr>
         <loc>United Arab Emirates (The)</loc>
@@ -20,7 +20,7 @@
         <curr>Armenian Dram</curr>
         <loc>Armenia</loc>
     </currency>
-    <currency rate="2.181374" live="1">
+    <currency rate="2.181546" live="1">
         <code>ANG</code>
         <curr>Netherlands Antillean Guilder</curr>
         <loc>Curaçao, Sint Maarten (Dutch Part)</loc>

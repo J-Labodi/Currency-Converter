@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta charset='UTF-8'>
     <title>Form Interface for POST, PUT & DELETE</title>
     <style>
       textarea {
@@ -8,85 +9,82 @@
         width: 400px;
         height: 350px;
       }
-      h3 {
-        color: rgb(226, 0, 0);
-      }
-      h4{
-        margin-bottom: 5px;
-      }
-      .myDiv {
-        line-height: 30px;
-      }
-      button {
-        cursor: pointer;
-      }
+      h3 {color: rgb(226, 0, 0);}
+      h4 {margin-bottom: 5px;}
+      button {cursor: pointer;}
+      .myDiv {line-height: 30px;}
     </style>
     <script>
       var url;
-      // do AJAX - it ain't rocket science
+      // loadDoc function to make Ajax call - utilising XMLHttpRequest object 
       function loadDoc(url) {
         var xhttp = new XMLHttpRequest();
+        /* if readyState property set to complete 
+        and http response header code is 200(good), 
+        set HTML content within textarea */  
         xhttp.onreadystatechange = function () {
           if (this.readyState == 4 && this.status == 200) {
             document.getElementById("xml_text").innerHTML = this.responseText;
             console.log(this.responseText);
           }
         };
+        // open and send the url to the server
         xhttp.open("GET", url, true);
         xhttp.send();
       }
-
+      // sendRequest function to send request to service upon submission
       function sendRequest() {
-        // get selected currency
-
-        // get selected action
+        // access value of selected radio button (action)
         var action = document.querySelector(
           "input[type='radio'][name=action]:checked"
         ).value;
+        // access value of selected currency within the drop-down list 
         var e = document.getElementById("currency-dropdown");
         var currency = e.options[e.selectedIndex].value;
-        console.log(currency);
-
-        // check to avoid sendig the value of firstOption to the service
+        /* ensure first option of drop-down list 'select currency code'
+        cannot be submitted - valid submission if 3 letter value submitted */
         if (currency.length == 3){
           url = "index.php?cur=" + currency + "&action=" + action;
           loadDoc(url);
         }
       }
-
+      /* refreshDropdown function to make Ajax call
+      upon selecting different action - refreshing content of drop-down list */
       function refreshDropdown(radioVal){
-
         dropdown.length = 0;
-
+        // define the URL of rates.xml and XMLHttpRequest
         const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
-
         const request = new XMLHttpRequest();
-        request.open("GET", url2, true);
 
+        // open request and run function on load
+        request.open("GET", url2, true);
         request.onload = function () {
+          // if status code is 200(good)
           if (request.status === 200) {
+            // parse the XML data with DOMParser
             parser = new DOMParser();
             const xml = parser.parseFromString(request.responseText, "text/xml");
           
-            // currency node
+            // access elements with the tag name of "code"
             node = xml.getElementsByTagName("code");
-          
-            // live attribute
-            var attr = node[0].parentElement.getAttribute("live");
           
             let option;
 
+            /* declare and add the first, incactive option of the drop-down list
+            'select currency code' */ 
             let firstOption = document.createElement("option");
             firstOption.text = "select currency code";
             firstOption.setAttribute("id", "firstoption");
             dropdown.add(firstOption);
 
+            // set the first option of the drop-down list to disabled and hidden 
             document.getElementById("firstoption").disabled = true;
+            document.getElementById("firstoption").hidden = true;
 
+            // generate the remaning content of the drop-down list - currencies
             for (let i = 0; i < node.length; i++) {
               option = document.createElement("option");
-            
-              // if action is post and attribute is 0
+              // in case POST selected, add only inactive currencies to the list
               if (radioVal == 'post'){
                 if (node[i].parentElement.getAttribute("live") == '0'){
                 option.text = node[i].childNodes[0].nodeValue;
@@ -94,8 +92,8 @@
                 dropdown.add(option);
                 }
               }
+              // in case PUT or DEL selected, add only active currencies to the list
               if (radioVal == 'put' || radioVal == 'del'){
-              // if action PUT or DEl and attribute is 1
                 if (node[i].parentElement.getAttribute("live") == '1'){
                 option.text = node[i].childNodes[0].nodeValue;
                 option.value = node[i].childNodes[0].nodeValue;
@@ -108,9 +106,9 @@
             // Reached the server, but it returned an error
           }
         };
-
+        // generate message in case error occurs while fetching rates.xml
         request.onerror = function () {
-          console.error("An error occurred fetching the JSON from " + url2);
+          console.error("An error occurred fetching the XML from " + url2);
         };
 
         request.send();
@@ -121,7 +119,9 @@
   <body>
     <h3>Form Interface for POST, PUT & DELETE</h3>
     <div class="myDiv">
-      <!-- radio buttons -->
+      <!-- radio buttons to select action PUT, POST, DEL 
+      refreshDropdown function triggered by onclick event 
+      PUT defined as checked (default Action) -->
       <label for="action">action:</label>
       <input type="radio" id="put" name="action" value="put" onclick="refreshDropdown(this.value)" checked="checked" />
       <label for="put">PUT</label>
@@ -129,17 +129,22 @@
       <label for="post">POST</label>
       <input type="radio" id="del" name="action" value="del" onclick="refreshDropdown(this.value)"/>
       <label for="del">DEL</label>
-      <br />
-      <!-- dropdown list Example 4 -->
+      <br>
+      <!-- dropdown list of currencies -->
       <label for="currency">cur:</label>
       <select id="currency-dropdown" name="currency"></select>
-      <br />
+      <br>
+      <!-- submit button - sendRequest function triggered by onclick event-->
       <button type="button" onclick="sendRequest()">submit</button>
     </div>
     <h4>Response XML</h4>
+    <!-- textarea of xml response -->
     <textarea id="xml_text"></textarea>
   </body>
   <script>
+    // TODO Finish commenting from here
+    // TODO Line 95 maybe working with else statement
+    // TODO Line 106 server error?? maybe mention in evaluation
     let dropdown = document.getElementById("currency-dropdown");
     dropdown.length = 0;
 
@@ -147,6 +152,7 @@
 
     dropdown.selectedIndex = 0;
 
+    // TODO check scope of constant as I am redeclaring this in function as well - maybe delete
     const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
 
     const request = new XMLHttpRequest();
@@ -169,6 +175,7 @@
         dropdown.add(firstOption);
 
         document.getElementById("firstoption").disabled = true;
+        document.getElementById("firstoption").hidden = true;
 
         for (let i = 0; i < node.length; i++) {
           option = document.createElement("option");
