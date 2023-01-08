@@ -47,8 +47,11 @@
         var currency = e.options[e.selectedIndex].value;
         console.log(currency);
 
-        url = "index.php?cur=" + currency + "&action=" + action;
-        loadDoc(url);
+        // check to avoid sendig the value of firstOption to the service
+        if (currency.length == 3){
+          url = "index.php?cur=" + currency + "&action=" + action;
+          loadDoc(url);
+        }
       }
 
       function refreshDropdown(radioVal){
