@@ -5,12 +5,14 @@
     <style>
       textarea {
         outline: none;
-        resize: none;
         width: 400px;
-        height: 400px;
+        height: 350px;
       }
       h3 {
         color: rgb(226, 0, 0);
+      }
+      h4{
+        margin-bottom: 5px;
       }
       .myDiv {
         line-height: 30px;
@@ -70,6 +72,14 @@
             var attr = node[0].parentElement.getAttribute("live");
           
             let option;
+
+            let firstOption = document.createElement("option");
+            firstOption.text = "select currency code";
+            firstOption.setAttribute("id", "firstoption");
+            dropdown.add(firstOption);
+
+            document.getElementById("firstoption").disabled = true;
+
             for (let i = 0; i < node.length; i++) {
               option = document.createElement("option");
             
@@ -110,7 +120,7 @@
     <div class="myDiv">
       <!-- radio buttons -->
       <label for="action">action:</label>
-      <input type="radio" id="put" name="action" value="put" onclick="refreshDropdown(this.value)"/>
+      <input type="radio" id="put" name="action" value="put" onclick="refreshDropdown(this.value)" checked="checked" />
       <label for="put">PUT</label>
       <input type="radio" id="post" name="action" value="post" onclick="refreshDropdown(this.value)"/>
       <label for="post">POST</label>
@@ -149,16 +159,22 @@
         var attr = node[0].parentElement.getAttribute("live");
 
         let option;
+
+        let firstOption = document.createElement("option");
+        firstOption.text = "select currency code";
+        firstOption.setAttribute("id", "firstoption");
+        dropdown.add(firstOption);
+
+        document.getElementById("firstoption").disabled = true;
+
         for (let i = 0; i < node.length; i++) {
           option = document.createElement("option");
 
-          // if action PUT or DEl and attribute is 1
+          if (node[i].parentElement.getAttribute("live") == '1'){
           option.text = node[i].childNodes[0].nodeValue;
           option.value = node[i].childNodes[0].nodeValue;
           dropdown.add(option);
-        
-          // if action is post and attribute is 0
-
+          }
           
         }
       } else {
