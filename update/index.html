@@ -15,8 +15,8 @@
       .myDiv {line-height: 30px;}
     </style>
     <script>
-      /* custom JavaScript fucntion
-      loadDoc, sendRequest functions are based
+      /* custom JavaScript functions
+      loadDoc, sendRequest, refreshDropdown functions are based
       on the provided example codes by Prof. Prakash Chatterjee */ 
       
       // loadDoc function to make Ajax call - utilising XMLHttpRequest object 
@@ -127,16 +127,23 @@
       <!-- radio buttons to select action PUT, POST, DEL 
       refreshDropdown function triggered by onclick event 
       PUT defined as checked (default Action) -->
-      <label for="action">action:</label>
-      <input type="radio" id="put" name="action" value="put" onclick="refreshDropdown(this.value)" checked="checked" />
-      <label for="put">PUT</label>
-      <input type="radio" id="post" name="action" value="post" onclick="refreshDropdown(this.value)"/>
-      <label for="post">POST</label>
-      <input type="radio" id="del" name="action" value="del" onclick="refreshDropdown(this.value)"/>
-      <label for="del">DEL</label>
+      <span>action:
+        <label>
+          PUT
+          <input type="radio" id="put" name="action" value="put" onclick="refreshDropdown(this.value)" checked="checked">
+        </label>
+        <label>
+          POST
+          <input type="radio" id="post" name="action" value="post" onclick="refreshDropdown(this.value)">
+        </label>
+        <label>
+          DEL
+          <input type="radio" id="del" name="action" value="del" onclick="refreshDropdown(this.value)">
+        </label>
+      </span>
       <br>
       <!-- dropdown list of currencies -->
-      <label for="currency">cur:</label>
+      <label for="currency-dropdown">cur:</label>
       <select id="currency-dropdown" name="currency"></select>
       <br>
       <!-- submit button - sendRequest function triggered by onclick event-->

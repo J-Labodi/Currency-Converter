@@ -356,14 +356,17 @@ if (!empty($format) && $format == 'json'){
 }
 /*
 TODO
-json response
-add where parakash code used
-change to localhost instead of 8000
+
 split the file to represent architecture if nedeed
-reset rates.xml before submission - should I provide formatted?
-testing designed and implemented?test tablE?
-validate html 
-check if the path is good
+
+testing designed and implemented?test table?
+
+act on Prakash's response - check through the highlighted coursework spec parts
+
+last steps before submission: 
+reset rates.xml - should I provide formatted file?
+change localhost:8000 to localhost in scripts
+check if the path is good - last Test on running apache thrpough control (move file)
 
 */
 ?>
