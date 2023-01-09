@@ -110,10 +110,8 @@
         request.onerror = function () {
           console.error("An error occurred fetching the XML from " + url2);
         };
-
         request.send();
       }
-
     </script>
   </head>
   <body>
@@ -142,44 +140,50 @@
     <textarea id="xml_text"></textarea>
   </body>
   <script>
-    // TODO Finish commenting from here
     // TODO Line 95 maybe working with else statement
     // TODO Line 106 server error?? maybe mention in evaluation
+    // TODO rename firstoption to defaultoption
+
+    // declare dropdown element with 0 length, set index to 0
     let dropdown = document.getElementById("currency-dropdown");
     dropdown.length = 0;
-
-    let defaultOption = document.createElement("option");
-
     dropdown.selectedIndex = 0;
 
     // TODO check scope of constant as I am redeclaring this in function as well - maybe delete
+    // define the URL of rates.xml and XMLHttpRequest
     const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
-
     const request = new XMLHttpRequest();
-    request.open("GET", url2, true);
 
+    // open request and run function on load
+    request.open("GET", url2, true);
     request.onload = function () {
+      // if status code is 200(good)
       if (request.status === 200) {
+        // parse the XML data with DOMParser
         parser = new DOMParser();
         const xml = parser.parseFromString(request.responseText, "text/xml");
 
+        // access elements with the tag name of "code"
         node = xml.getElementsByTagName("code");
-
-        var attr = node[0].parentElement.getAttribute("live");
 
         let option;
 
+        /* declare and add the first, incactive option of the drop-down list
+        'select currency code' */ 
         let firstOption = document.createElement("option");
         firstOption.text = "select currency code";
         firstOption.setAttribute("id", "firstoption");
         dropdown.add(firstOption);
 
+        // set the first option of the drop-down list to disabled and hidden 
         document.getElementById("firstoption").disabled = true;
         document.getElementById("firstoption").hidden = true;
 
+        // generate the remaning content of the drop-down list - currencies
         for (let i = 0; i < node.length; i++) {
           option = document.createElement("option");
-
+          /* as PUT is the default action (checked) on load up
+          add only active currencies to the list */
           if (node[i].parentElement.getAttribute("live") == '1'){
           option.text = node[i].childNodes[0].nodeValue;
           option.value = node[i].childNodes[0].nodeValue;
@@ -191,12 +195,10 @@
         // Reached the server, but it returned an error
       }
     };
-
+    // generate message in case error occurs while fetching rates.xml
     request.onerror = function () {
-      console.error("An error occurred fetching the JSON from " + url2);
+      console.error("An error occurred fetching the XML from " + url2);
     };
-
     request.send();
-
   </script>
 </html>
