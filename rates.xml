@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rates ts="1673020777" base="GBP">
-    <currency rate="4.441517" live="1">
+    <currency rate="4.454051" live="1">
         <code>AED</code>
         <curr>UAE Dirham</curr>
         <loc>United Arab Emirates (The)</loc>
     </currency>
-    <currency rate="107.027876" live="0">
+    <currency rate="106.343484" live="0">
         <code>AFN</code>
         <curr>Afghani</curr>
         <loc>Afghanistan</loc>
     </currency>
-    <currency rate="134.051392" live="1">
+    <currency rate="133.674765" live="1">
         <code>ALL</code>
         <curr>Lek</curr>
         <loc>Albania</loc>

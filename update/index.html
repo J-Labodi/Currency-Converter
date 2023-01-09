@@ -15,9 +15,12 @@
       .myDiv {line-height: 30px;}
     </style>
     <script>
-      var url;
       // loadDoc function to make Ajax call - utilising XMLHttpRequest object 
       function loadDoc(url) {
+        // access value of selected radio button (action)
+        var action = document.querySelector(
+          "input[type='radio'][name=action]:checked"
+        ).value;
         var xhttp = new XMLHttpRequest();
         /* if readyState property set to complete 
         and http response header code is 200(good), 
@@ -25,6 +28,9 @@
         xhttp.onreadystatechange = function () {
           if (this.readyState == 4 && this.status == 200) {
             document.getElementById("xml_text").innerHTML = this.responseText;
+            /* refresh dropdown after executing action to avoid 
+            having modified currency in the list after submit */
+            refreshDropdown(action);
             console.log(this.responseText);
           }
         };
@@ -32,6 +38,7 @@
         xhttp.open("GET", url, true);
         xhttp.send();
       }
+
       // sendRequest function to send request to service upon submission
       function sendRequest() {
         // access value of selected radio button (action)
@@ -41,21 +48,18 @@
         // access value of selected currency within the drop-down list 
         var e = document.getElementById("currency-dropdown");
         var currency = e.options[e.selectedIndex].value;
-        /* ensure first option of drop-down list 'select currency code'
+        /* ensure default option of drop-down list 'select currency code'
         cannot be submitted - valid submission if 3 letter value submitted */
         if (currency.length == 3){
           url = "index.php?cur=" + currency + "&action=" + action;
           loadDoc(url);
         }
       }
+
       /* refreshDropdown function to make Ajax call
       upon selecting different action - refreshing content of drop-down list */
       function refreshDropdown(radioVal){
         dropdown.length = 0;
-        // define the URL of rates.xml and XMLHttpRequest
-        const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
-        const request = new XMLHttpRequest();
-
         // open request and run function on load
         request.open("GET", url2, true);
         request.onload = function () {
@@ -70,40 +74,38 @@
           
             let option;
 
-            /* declare and add the first, incactive option of the drop-down list
+            /* declare and add the default, incactive option of the drop-down list
             'select currency code' */ 
-            let firstOption = document.createElement("option");
-            firstOption.text = "select currency code";
-            firstOption.setAttribute("id", "firstoption");
-            dropdown.add(firstOption);
+            let defaultOption = document.createElement("option");
+            defaultOption.text = "select currency code";
+            defaultOption.setAttribute("id", "defaultoption");
+            dropdown.add(defaultOption);
 
-            // set the first option of the drop-down list to disabled and hidden 
-            document.getElementById("firstoption").disabled = true;
-            document.getElementById("firstoption").hidden = true;
+            // set the default option of the drop-down list to disabled and hidden 
+            document.getElementById("defaultoption").disabled = true;
+            document.getElementById("defaultoption").hidden = true;
 
             // generate the remaning content of the drop-down list - currencies
             for (let i = 0; i < node.length; i++) {
               option = document.createElement("option");
-              // in case POST selected, add only inactive currencies to the list
+              /* in case POST selected, add inactive currencies to the list
+              else, PUT or DEL selected, add active currencies to the list */
               if (radioVal == 'post'){
                 if (node[i].parentElement.getAttribute("live") == '0'){
                 option.text = node[i].childNodes[0].nodeValue;
                 option.value = node[i].childNodes[0].nodeValue;
                 dropdown.add(option);
                 }
-              }
-              // in case PUT or DEL selected, add only active currencies to the list
-              if (radioVal == 'put' || radioVal == 'del'){
+              } else{
                 if (node[i].parentElement.getAttribute("live") == '1'){
                 option.text = node[i].childNodes[0].nodeValue;
                 option.value = node[i].childNodes[0].nodeValue;
                 dropdown.add(option);
                 }
               }
-
             }
           } else {
-            // Reached the server, but it returned an error
+            // reached the server, but it returned an error
           }
         };
         // generate message in case error occurs while fetching rates.xml
@@ -138,67 +140,65 @@
     <h4>Response XML</h4>
     <!-- textarea of xml response -->
     <textarea id="xml_text"></textarea>
-  </body>
-  <script>
-    // TODO Line 95 maybe working with else statement
-    // TODO Line 106 server error?? maybe mention in evaluation
-    // TODO rename firstoption to defaultoption
 
-    // declare dropdown element with 0 length, set index to 0
-    let dropdown = document.getElementById("currency-dropdown");
-    dropdown.length = 0;
-    dropdown.selectedIndex = 0;
+    <!-- main JavaScript code-->
+    <script>
+      // define global variable 'url' for sendRequest and loadDoc functions
+      var url;
+      // define constants for the URL of rates.xml and XMLHttpRequest
+      const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
+      const request = new XMLHttpRequest();
 
-    // TODO check scope of constant as I am redeclaring this in function as well - maybe delete
-    // define the URL of rates.xml and XMLHttpRequest
-    const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
-    const request = new XMLHttpRequest();
+      // declare dropdown element with 0 length, set index to 0
+      let dropdown = document.getElementById("currency-dropdown");
+      dropdown.length = 0;
+      dropdown.selectedIndex = 0;
 
-    // open request and run function on load
-    request.open("GET", url2, true);
-    request.onload = function () {
-      // if status code is 200(good)
-      if (request.status === 200) {
-        // parse the XML data with DOMParser
-        parser = new DOMParser();
-        const xml = parser.parseFromString(request.responseText, "text/xml");
+      // open request and run function on load
+      request.open("GET", url2, true);
+      request.onload = function () {
+        // if status code is 200(good)
+        if (request.status === 200) {
+          // parse the XML data with DOMParser
+          parser = new DOMParser();
+          const xml = parser.parseFromString(request.responseText, "text/xml");
 
-        // access elements with the tag name of "code"
-        node = xml.getElementsByTagName("code");
+          // access elements with the tag name of "code"
+          node = xml.getElementsByTagName("code");
 
-        let option;
+          let option;
 
-        /* declare and add the first, incactive option of the drop-down list
-        'select currency code' */ 
-        let firstOption = document.createElement("option");
-        firstOption.text = "select currency code";
-        firstOption.setAttribute("id", "firstoption");
-        dropdown.add(firstOption);
+          /* declare and add the default, incactive option of the drop-down list
+          'select currency code' */ 
+          let defaultOption = document.createElement("option");
+          defaultOption.text = "select currency code";
+          defaultOption.setAttribute("id", "defaultoption");
+          dropdown.add(defaultOption);
 
-        // set the first option of the drop-down list to disabled and hidden 
-        document.getElementById("firstoption").disabled = true;
-        document.getElementById("firstoption").hidden = true;
+          // set the default option of the drop-down list to disabled and hidden 
+          document.getElementById("defaultoption").disabled = true;
+          document.getElementById("defaultoption").hidden = true;
 
-        // generate the remaning content of the drop-down list - currencies
-        for (let i = 0; i < node.length; i++) {
-          option = document.createElement("option");
-          /* as PUT is the default action (checked) on load up
-          add only active currencies to the list */
-          if (node[i].parentElement.getAttribute("live") == '1'){
-          option.text = node[i].childNodes[0].nodeValue;
-          option.value = node[i].childNodes[0].nodeValue;
-          dropdown.add(option);
+          // generate the remaning content of the drop-down list - currencies
+          for (let i = 0; i < node.length; i++) {
+            option = document.createElement("option");
+            /* as PUT is the default action (checked) on load up
+            add only active currencies to the list */
+            if (node[i].parentElement.getAttribute("live") == '1'){
+            option.text = node[i].childNodes[0].nodeValue;
+            option.value = node[i].childNodes[0].nodeValue;
+            dropdown.add(option);
+            } 
           }
-          
+        } else {
+          // reached the server, but it returned an error
         }
-      } else {
-        // Reached the server, but it returned an error
-      }
-    };
-    // generate message in case error occurs while fetching rates.xml
-    request.onerror = function () {
-      console.error("An error occurred fetching the XML from " + url2);
-    };
-    request.send();
-  </script>
+      };
+      // generate message in case error occurs while fetching rates.xml
+      request.onerror = function () {
+        console.error("An error occurred fetching the XML from " + url2);
+      };
+      request.send();
+    </script>
+  </body>
 </html>
