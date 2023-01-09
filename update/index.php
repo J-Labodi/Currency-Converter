@@ -272,11 +272,4 @@ if($action == 'del'){
   // display xml output
   echo $dom->saveXML();
 }
-/*
-
-reset rates.xml before submission
-
-is it NULL or empty string? if action is provided but not reocgnized? same NULL?
-
-*/
 ?>

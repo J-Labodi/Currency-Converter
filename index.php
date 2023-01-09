@@ -67,15 +67,20 @@ function generateErrorm($err_code){
     $data_err = $dom_err->saveXML();
     // load xml data into xml data object
     $xmldata_err = simplexml_load_string($data_err);
+    // convert xml object to array
+    $array = json_decode(json_encode($xmldata_err), true);
+    // add root node to array
+    $output = array($xmldata_err->getName() => $array);
     // display JSON output (encoded xml data)
-    echo json_encode($xmldata_err, JSON_PRETTY_PRINT);
+    echo json_encode($output, JSON_PRETTY_PRINT);
   } else{
     // display xml output
     echo $dom_err->saveXML();
   }    
 }
 
-// generateRatesXML function to generate rates.xml file
+/* generateRatesXML function to generate rates.xml file
+(based on the provided example code by Prof. Prakash Chatterjee) */
 function generateRatesXML(){
   // get the iso currencies xml file
   $iso_xml = simplexml_load_file(ISO_XML) or die("Error: Cannot load currencies file");   
@@ -339,18 +344,26 @@ if (!empty($format) && $format == 'json'){
   $data = $dom->saveXML();
   // load xml data into xml data object
   $xmldata = simplexml_load_string($data);
+  // convert xml object to array
+  $array = json_decode(json_encode($xmldata), true);
+  // add root node to array
+  $output = array($xmldata->getName() => $array);
   // display JSON output (encoded xml data)
-  echo json_encode($xmldata, JSON_PRETTY_PRINT);
+  echo json_encode($output, JSON_PRETTY_PRINT);
 } else{
   // display xml output
   echo $dom->saveXML();
 }
 /*
 TODO
-
-json error doesn't show root
-
-reset rates.xml before submission
+json response
+add where parakash code used
+change to localhost instead of 8000
+split the file to represent architecture if nedeed
+reset rates.xml before submission - should I provide formatted?
+testing designed and implemented?test tablE?
+validate html 
+check if the path is good
 
 */
 ?>

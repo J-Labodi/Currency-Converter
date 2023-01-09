@@ -15,6 +15,10 @@
       .myDiv {line-height: 30px;}
     </style>
     <script>
+      /* custom JavaScript fucntion
+      loadDoc, sendRequest functions are based
+      on the provided example codes by Prof. Prakash Chatterjee */ 
+      
       // loadDoc function to make Ajax call - utilising XMLHttpRequest object 
       function loadDoc(url) {
         // access value of selected radio button (action)
@@ -72,6 +76,7 @@
             // access elements with the tag name of "code"
             node = xml.getElementsByTagName("code");
           
+            // declare option variable with block scope
             let option;
 
             /* declare and add the default, incactive option of the drop-down list
@@ -141,7 +146,8 @@
     <!-- textarea of xml response -->
     <textarea id="xml_text"></textarea>
 
-    <!-- main JavaScript code-->
+    <!-- main JavaScript code 
+    script based on the provided example codes by Prof. Prakash Chatterjee -->
     <script>
       // define global variable 'url' for sendRequest and loadDoc functions
       var url;
@@ -166,6 +172,7 @@
           // access elements with the tag name of "code"
           node = xml.getElementsByTagName("code");
 
+          // declare option variable with block scope
           let option;
 
           /* declare and add the default, incactive option of the drop-down list
