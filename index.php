@@ -354,19 +354,4 @@ if (!empty($format) && $format == 'json'){
   // display xml output
   echo $dom->saveXML();
 }
-/*
-TODO
-
-split the file to represent architecture if nedeed
-
-testing designed and implemented?test table?
-
-act on Prakash's response - check through the highlighted coursework spec parts
-
-last steps before submission: 
-reset rates.xml - should I provide formatted file?
-change localhost:8000 to localhost in scripts
-check if the path is good - last Test on running apache thrpough control (move file)
-
-*/
 ?>
