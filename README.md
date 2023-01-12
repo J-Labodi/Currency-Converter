@@ -75,8 +75,8 @@ As an extension of the initial currency conversion microservice, the application
 
 This feature supporting the following requests:
 
-* PUT request generates a call to an external rates service and update the rate value (for a specific currency) in the XML data store.
-* POST request gets the currency rate and value (for a new currency) and insert a new record the XML data store.
+* PUT request generates a call to the external rates service and update the rate value (for a specific currency) in the XML data store.
+* POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store.
 * DEL request makes a currency unavaialble to the service (Error 1200).
 
 CRUD functionality may be accessed through the following requests: 
