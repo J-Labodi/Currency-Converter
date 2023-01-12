@@ -41,6 +41,22 @@ USD |	US Dollar
 ZAR |	South African Rand
 
 
+The following request provides accessability to the microservice, providing required paramaters such as conversion from & to, amount of conversion and format. 
+
+`http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
+
+### Response of conversion in XML and JSON format
+
+![xml_conversion](https://user-images.githubusercontent.com/79979904/212058329-a8ccfdf3-ecd2-4a63-901c-5760cfd1e66e.jpg)
+![json_conversion](https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg)
+
+
+## Error Handling
+
+
+
+
+
 ### CRUD Functionality
 
 
