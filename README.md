@@ -4,7 +4,7 @@ The aim of the project is to build a Restful API based microservice for currency
 
 The service may be acessed through sending (GET) request encoded as follows:
 
-'http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml'
+`http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
 
 ## Project Description
 
