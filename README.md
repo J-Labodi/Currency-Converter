@@ -81,11 +81,11 @@ This feature supporting the following requests:
 
 CRUD functionality may be accessed through the following requests: 
 
-PUT: `http://localhost/atwd1/assignment/update/?cur=USD&action=put`
+PUT: `http://localhost/atwd1/assignment/update/?cur=EUR&action=put`
 
-POST: `http://localhost/atwd1/assignment/update/?cur=USD&action=post`
+POST: `http://localhost/atwd1/assignment/update/?cur=PKR&action=post`
 
-DEL: `http://localhost/atwd1/assignment/update/?cur=GBP&action=del`
+DEL: `http://localhost/atwd1/assignment/update/?cur=NZD&action=del`
 
 ### Client Interface
 
