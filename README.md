@@ -8,9 +8,30 @@ The aim of the project is to build a Restful API based microservice for currency
 
 Initially, the currency converter provided currency conversion function to & from the following (24) ISO 4217 currencies:
 
-![curr_list1](https://user-images.githubusercontent.com/79979904/212047908-f44ad989-b0d0-4a7f-aa1e-688a88f129ce.jpg)
-![curr_list2](https://user-images.githubusercontent.com/79979904/212048319-a5df9eaa-61cb-4da0-82c7-408a3b1cc31d.jpg)
-
+AUD	Australian Dollar
+BRL	Brazlian Real
+CAD	Canada Dollar
+CHF	Swiss Franc
+CNY	Chinese Yuan Renminbi
+DKK	Danish Krone
+EUR	Euro
+GBP	Pound Sterling (reference currency)
+HKD	Hong Kong Dollar
+HUF	Hungarian Forint
+INR	Indian Rupee
+JPY	Japanese Yen
+MXN	Mexican Peso
+MYR	Malaysian Ringgit
+NOK	Norwegian Krone
+NZD	New Zealand Dollar
+PHP	Philippine Peso
+RUB	Russian Ruble
+SEK	Swedish Krona
+SGD	Singapore Dollar
+THB	Thai Baht
+TRY	Turkish Lira
+USD	US Dollar
+ZAR	South African Rand
 
 
 
