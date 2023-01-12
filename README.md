@@ -1,8 +1,10 @@
 # Restful Currency Converter Microservice
 
-The aim of the project is to build a Restful API based microservice for currency conversion with full CRUD functionaility as well as a client interface to demonstrate & test the application.
+The aim of the project is to build a Restful API based microservice for currency conversion with full CRUD functionaility as well as a client interface to demonstrate & test the application. The microservice has been built with HTML, CSS, PHP and JavaScript, making use of XML, XPath and Ajax. 
 
+The service may be acessed through sending (GET) request encoded as follows:
 
+http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml
 
 ## Project Description
 
@@ -35,12 +37,6 @@ THB |	Thai Baht
 TRY |	Turkish Lira
 USD |	US Dollar
 ZAR |	South African Rand
-
-
-
-
-
-
 
 ## Screnshots
 
