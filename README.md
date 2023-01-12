@@ -40,11 +40,5 @@ TRY |	Turkish Lira
 USD |	US Dollar
 ZAR |	South African Rand
 
-## Screnshots
-
-### ss1
-
-
-
 
 ## Run the application locally
