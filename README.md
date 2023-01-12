@@ -45,7 +45,7 @@ The following request provides accessability to the microservice, providing requ
 
 `http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
 
-### Request response in XML and JSON format
+#### Request response in XML and JSON format
 
 ![xml_conversion](https://user-images.githubusercontent.com/79979904/212058329-a8ccfdf3-ecd2-4a63-901c-5760cfd1e66e.jpg)
 ![json_conversion](https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg)
