@@ -51,10 +51,19 @@ The following request provides accessability to the microservice, providing requ
 ![json_conversion](https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg)
 
 
-## Error Handling
+### Error Handling
 
+As there are required prameters to complete the conversion, simple error handling has been implemented to ensure the micorservice receives valid requests only. 
+The service returns the follwoing error codes & messages in case the received request is in invalid format:   
 
-
+Code  | Message
+:----------|:-------------
+1000 | Required parameter is missing
+1100 | Parameter not recognized
+1200 | Currency type not recognized
+1300 | Currency amount must be a decimal number
+1400 | Format must be xml or json
+1500 | Error in service
 
 
 ### CRUD Functionality
