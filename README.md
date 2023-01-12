@@ -54,7 +54,7 @@ The following request provides accessability to the microservice, providing requ
 ### Error Handling
 
 As there are required prameters to complete the conversion, simple error handling has been implemented to ensure the micorservice receives valid requests only. 
-The service returns the follwoing error codes & messages in case the received request is in invalid format:   
+The service returns the following error codes & messages in case the received request is in invalid format:   
 
 Code  | Message
 :----------|:-------------
@@ -65,6 +65,9 @@ Code  | Message
 1400 | Format must be xml or json
 1500 | Error in service
 
+#### Error response 
+
+![xml_error_message](https://user-images.githubusercontent.com/79979904/212061360-815be3e4-a3c7-4a24-b333-de247f7c0617.jpg)
 
 ### CRUD Functionality
 
