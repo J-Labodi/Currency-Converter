@@ -103,9 +103,9 @@ As the last stage of development, the currency converter microservice has been e
 This Form Interface allows the user to select the desired action and it also features a dynamic list that updates its content, depending on the selected action.
 The logic behind of this behaviour limits the user to choose the appropriate currency for the chosen action. 
 
-* PUT request generates a call to the external rates service and update the rate value (for a specific currency) in the XML data store. <br/>Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active(currency "live" attribute set to "1").
-* POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store. Content of the dynamic list limited to the currencies that are available for update within the XML data store and marked as inactive (currency stored in the data store and marked as inactive - live="0").
-* DEL request makes a currency inactive. Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active(currency stored in the data store and marked as active - live="1")
+* PUT request generates a call to the external rates service and update the rate value (for a specific currency) in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active (currency "live" attribute set to "1").
+* POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and marked as inactive (currency "live" attribute set to "0").
+* DEL request makes a currency inactive. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active(currency "live" attribute set to "1")
 
 
 ![dynamic_list](https://user-images.githubusercontent.com/79979904/212067960-59e717f7-2ea9-4ef8-b299-536a47c2b7a7.jpg)
