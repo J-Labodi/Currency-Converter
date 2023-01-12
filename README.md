@@ -41,4 +41,18 @@ USD |	US Dollar
 ZAR |	South African Rand
 
 
+### CRUD Functionality
+
+
+
+
+
+
+### Client Interface
+
+
+
+
+
+
 ## Run the application locally
