@@ -2,7 +2,7 @@
 
 The aim of the project was to build a Restful API based microservice for currency conversion with full CRUD functionaility as well as a client interface to demonstrate & test the application. The currency converter microservice has been built with HTML, CSS, PHP and JavaScript, making use of XML, XPath and Ajax. The service utilises Fixer API to ensure exchange rates are up-to-date. This microservice updates the exchange rates periodically (every 12 hours) and store the pulled data in the application's XML dataset. The currency converter microservice provides conversion through HTTP GET requests, returning conversion data in XML or JSON formats. 
 
-The service may be acessed through sending (GET) request encoded as follows:
+The service may be acessed locally through sending request encoded as follows:
 
 `http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
 
