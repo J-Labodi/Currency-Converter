@@ -79,8 +79,7 @@ function generateErrorm($err_code){
   }    
 }
 
-/* generateRatesXML function to generate rates.xml file
-(based on the provided example code by Prof. Prakash Chatterjee) */
+// generateRatesXML function to generate rates.xml file
 function generateRatesXML(){
   // get the iso currencies xml file
   $iso_xml = simplexml_load_file(ISO_XML) or die("Error: Cannot load currencies file");   

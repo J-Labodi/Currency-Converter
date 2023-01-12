@@ -14,11 +14,7 @@
       button {cursor: pointer;}
       .myDiv {line-height: 30px;}
     </style>
-    <script>
-      /* custom JavaScript functions
-      loadDoc, sendRequest, refreshDropdown functions are based
-      on the provided example codes by Prof. Prakash Chatterjee */ 
-      
+    <script>      
       // loadDoc function to make Ajax call - utilising XMLHttpRequest object 
       function loadDoc(url) {
         // access value of selected radio button (action)
@@ -152,14 +148,11 @@
     <h4>Response XML</h4>
     <!-- textarea of xml response -->
     <textarea id="xml_text"></textarea>
-
-    <!-- main JavaScript code 
-    script based on the provided example codes by Prof. Prakash Chatterjee -->
     <script>
       // define global variable 'url' for sendRequest and loadDoc functions
       var url;
       // define constants for the URL of rates.xml and XMLHttpRequest
-      const url2 = "http://localhost:8000/atwd1/assignment/rates.xml";
+      const url2 = "http://localhost/atwd1/assignment/rates.xml";
       const request = new XMLHttpRequest();
 
       // declare dropdown element with 0 length, set index to 0
