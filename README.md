@@ -8,7 +8,7 @@ The aim of the project is to build a Restful API based microservice for currency
 
 Initially, the currency converter provided currency conversion function to & from the following (24) ISO 4217 currencies:
 
-ISO   |
+
 Code  | Currency
 :----------|:-------------
 AUD	| Australian Dollar
