@@ -90,18 +90,13 @@ DEL:  `http://localhost/atwd1/assignment/update/?cur=NZD&action=del`
 
 #### PUT, POST and DEL request responses 
 
-
-
-
-
-### Client Interface
-
 ![xml_put](https://user-images.githubusercontent.com/79979904/212067126-4dc207d5-deb0-49cc-a44c-cdf9cabac418.jpg)
 
 ![xml_post](https://user-images.githubusercontent.com/79979904/212067161-45651a85-1c32-4667-add7-8f060c7404c4.jpg)
 
 ![xml_del](https://user-images.githubusercontent.com/79979904/212067188-2cee2ab8-acc4-4c55-b3c1-91cfc2cadd62.jpg)
 
+### Client Interface
 
 
 ## Run the application locally
