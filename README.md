@@ -71,10 +71,21 @@ Code  | Message
 
 ### CRUD Functionality
 
+As an extension of the initial currency conversion microservice, the application has been refactored by implementing full CRUD functionality.
 
+This feature supporting the following requests:
 
+* PUT request generates a call to an external rates service and update the rate value (for a specific currency) in the XML data store.
+* POST request gets the currency rate and value (for a new currency) and insert a new record the XML data store.
+* DEL request makes a currency unavaialble to the service (Error 1200).
 
+CRUD functionality may be accessed through the following requests: 
 
+PUT: `http://localhost/atwd1/assignment/update/?cur=USD&action=put`
+
+POST: `http://localhost/atwd1/assignment/update/?cur=USD&action=post`
+
+DEL: `http://localhost/atwd1/assignment/update/?cur=GBP&action=del`
 
 ### Client Interface
 
