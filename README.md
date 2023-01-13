@@ -47,8 +47,8 @@ The following request provides accessability to the microservice, supplying requ
 
 #### Request response in XML and JSON format
 
-<img src="https://user-images.githubusercontent.com/79979904/212058329-a8ccfdf3-ecd2-4a63-901c-5760cfd1e66e.jpg" width="200">
-<img src="https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg" width="200">
+<img src="https://user-images.githubusercontent.com/79979904/212058329-a8ccfdf3-ecd2-4a63-901c-5760cfd1e66e.jpg" width="300">
+<img src="https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg" width="300">
 
 
 ### Error Handling
