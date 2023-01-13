@@ -108,7 +108,7 @@ The logic behind of this behaviour limits the user to choose the appropriate cur
 * DEL request makes a currency inactive. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute set to "1").
 
 
-<img src="https://user-images.githubusercontent.com/79979904/212067960-59e717f7-2ea9-4ef8-b299-536a47c2b7a7.jpg" width="400"> | <img src="https://user-images.githubusercontent.com/79979904/212067969-549f8a39-10ab-4d0e-a6ce-8e80d621df33.jpg" width="400">
+<img src="https://user-images.githubusercontent.com/79979904/212067960-59e717f7-2ea9-4ef8-b299-536a47c2b7a7.jpg" width="400"> <img src="https://user-images.githubusercontent.com/79979904/212067969-549f8a39-10ab-4d0e-a6ce-8e80d621df33.jpg" width="400">
 
 
 
