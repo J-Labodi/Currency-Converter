@@ -47,8 +47,8 @@ The following request provides accessability to the microservice, supplying requ
 
 #### Request response in XML and JSON format
 
-![xml_conversion](https://user-images.githubusercontent.com/79979904/212058329-a8ccfdf3-ecd2-4a63-901c-5760cfd1e66e.jpg)
-![json_conversion](https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg)
+<img src="https://user-images.githubusercontent.com/79979904/212058329-a8ccfdf3-ecd2-4a63-901c-5760cfd1e66e.jpg" width="200">
+<img src="https://user-images.githubusercontent.com/79979904/212058428-aab801e9-01ad-4819-aabe-490b7e58c373.jpg" width="200">
 
 
 ### Error Handling
@@ -67,7 +67,7 @@ Code  | Message
 
 #### Error response 
 
-![xml_error_message](https://user-images.githubusercontent.com/79979904/212061360-815be3e4-a3c7-4a24-b333-de247f7c0617.jpg)
+<img src="https://user-images.githubusercontent.com/79979904/212061360-815be3e4-a3c7-4a24-b333-de247f7c0617.jpg" width="200">
 
 ### CRUD Functionality
 
@@ -90,11 +90,11 @@ DEL:  `http://localhost/atwd1/assignment/update/?cur=NZD&action=del`
 
 #### PUT, POST and DEL request responses 
 
-![xml_put](https://user-images.githubusercontent.com/79979904/212067126-4dc207d5-deb0-49cc-a44c-cdf9cabac418.jpg)
+<img src="https://user-images.githubusercontent.com/79979904/212067126-4dc207d5-deb0-49cc-a44c-cdf9cabac418.jpg" width="200">
 
-![xml_post](https://user-images.githubusercontent.com/79979904/212067161-45651a85-1c32-4667-add7-8f060c7404c4.jpg)
+<img src="https://user-images.githubusercontent.com/79979904/212067161-45651a85-1c32-4667-add7-8f060c7404c4.jpg" width="200">
 
-![xml_del](https://user-images.githubusercontent.com/79979904/212067188-2cee2ab8-acc4-4c55-b3c1-91cfc2cadd62.jpg)
+<img src="https://user-images.githubusercontent.com/79979904/212067188-2cee2ab8-acc4-4c55-b3c1-91cfc2cadd62.jpg" width="200">
 
 ### Client Interface
 
