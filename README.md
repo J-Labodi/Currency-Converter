@@ -105,7 +105,7 @@ The logic behind of this behaviour limits the user to choose the appropriate cur
 
 * PUT request generates a call to the external rates service and update the rate value (for a specific currency) in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute set to "1").
 * POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and marked as inactive (currency "live" attribute set to "0").
-* DEL request makes a currency inactive. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active (currency "live" attribute set to "1")
+* DEL request makes a currency inactive. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute set to "1").
 
 
 <img src="https://user-images.githubusercontent.com/79979904/212067960-59e717f7-2ea9-4ef8-b299-536a47c2b7a7.jpg" width="200">
