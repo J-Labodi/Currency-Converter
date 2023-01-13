@@ -120,7 +120,7 @@ In order to run the Currency Converter microservice in a local environment, comp
 - Start the Apache module within your XAMPP control panel 
 - Access the microservice's functionalities with the following requests:
 
-#### Example of currency conversion request
+#### Example of the currency conversion request
 
 `http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
 
