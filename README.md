@@ -114,4 +114,24 @@ The logic behind of this behaviour limits the user to choose the appropriate cur
 
 ## Run the application locally
 
+In order to run the Currency Converter microservice in a local environment, complete the following steps;
 
+- Copy the application to your htdocs directory (XAMPP required)
+- Start the Apache module within your XAMPP control panel 
+- Access the microservice's functionalities with the following requests:
+
+#### Example of currency conversion request
+
+`http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
+
+#### Examples of updating the dataset (CRUD)
+
+PUT:  `http://localhost/atwd1/assignment/update/?cur=EUR&action=put`
+
+POST: `http://localhost/atwd1/assignment/update/?cur=PKR&action=post`
+
+DEL:  `http://localhost/atwd1/assignment/update/?cur=NZD&action=del`
+
+#### Accessing client interface
+
+`http://localhost/atwd1/assignment/update/index.html`
