@@ -107,14 +107,9 @@ The logic behind of this behaviour limits the user to choose the appropriate cur
 * POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and marked as inactive (currency "live" attribute set to "0").
 * DEL request makes a currency inactive. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute set to "1").
 
+#### Dynamic dropdown & PUT request response
 
 <img src="https://user-images.githubusercontent.com/79979904/212067960-59e717f7-2ea9-4ef8-b299-536a47c2b7a7.jpg" width="400"> <img src="https://user-images.githubusercontent.com/79979904/212067969-549f8a39-10ab-4d0e-a6ce-8e80d621df33.jpg" width="400">
-
-
-
-<img src="https://user-images.githubusercontent.com/79979904/212067967-a854ccba-d5ea-44ed-b56b-7204062fb63c.jpg" width="400">
-
-<img src="https://user-images.githubusercontent.com/79979904/212067971-877df216-b5b4-4c57-a1ec-f4991cd8acb0.jpg" width="400">
 
 
 ## Run the application locally
