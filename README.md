@@ -1,10 +1,10 @@
 # RESTful Currency Converter Microservice
 
-The aim of the project was to build a Restful API based microservice for currency conversion with full CRUD functionaility as well as a client interface to demonstrate & test the application. 
+The aim of the project was to build a Restful API based microservice for currency conversion with full CRUD functionality as well as a client interface to demonstrate & test the application. 
 
-The currency converter microservice has been built with HTML, CSS, PHP and JavaScript, making use of XML, XPath and Ajax. The service utilises Fixer API to ensure exchange rates are up-to-date. This microservice updates the exchange rates periodically (every 12 hours) and store the pulled data in the application's XML dataset. The currency converter microservice provides conversion through HTTP GET requests, returning conversion data in XML or JSON formats. 
+The currency converter microservice has been built with HTML, CSS, PHP and JavaScript, making use of XML, XPath and Ajax. The service utilises Fixer API to ensure exchange rates are up-to-date. This microservice updates the exchange rates periodically (every 12 hours) and stores the pulled data in the application's XML dataset. The currency converter microservice provides conversion through HTTP GET requests, returning conversion data in XML or JSON formats. 
 
-The service may be acessed locally through sending request encoded as follows:
+The service may be accessed locally by sending a request encoded as follows:
 
 `http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
 
@@ -41,7 +41,7 @@ USD |	US Dollar
 ZAR |	South African Rand
 
 
-The following request provides accessability to the microservice, supplying required paramaters such as conversion from & to, amount of conversion and format. 
+The following request provides accessibility to the microservice, supplying required parameters such as conversion from & to, amount of conversion and format. 
 
 `http://localhost/atwd1/assignment/?from=GBP&to=JPY&amnt=10.35&format=xml`
 
@@ -53,8 +53,8 @@ The following request provides accessability to the microservice, supplying requ
 
 ### Error Handling
 
-As there are required prameters to complete the conversion, simple error handling has been implemented to ensure the micorservice receives valid requests only. 
-The service returns the following error codes & messages in case the received request is in invalid format:   
+As there are required parameters to complete the conversion, simple error handling has been implemented to ensure the microservice receives valid requests only. 
+The service returns the following error codes & messages in case the received request is in an invalid format:   
 
 Code  | Message
 :----------|:-------------
@@ -73,11 +73,11 @@ Code  | Message
 
 As an extension of the initial currency conversion microservice, the application has been refactored by implementing full CRUD functionality.
 
-This feature supporting the following requests:
+This feature supports the following requests:
 
-* PUT request generates a call to the external rates service and update the rate value (for a specific currency) in the XML data store.
-* POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store.
-* DEL request makes a currency unavaialble to the service (Error 1200).
+* PUT request generates a call to the external rates service and updates the rate value (for a specific currency) in the XML data store.
+* POST request gets the currency rate and value (for a new currency) and inserts a new record in the XML data store.
+* DEL request makes a currency unavailable to the service (Error 1200).
 
 CRUD functionality may be accessed through the following requests: 
 
@@ -101,11 +101,11 @@ DEL:  `http://localhost/atwd1/assignment/update/?cur=NZD&action=del`
 As the last stage of development, the currency converter microservice has been extended with a client interface to demonstrate & test the application. 
 
 This Form Interface allows the user to select the desired request and it also features a dynamic list that updates its content, depending on the selected action.
-The logic behind of this behaviour limits the user to choose the appropriate currency for the chosen action. 
+The logic behind this behaviour limits the user to choose the appropriate currency for the chosen action. 
 
-* PUT request generates a call to the external rates service and update the rate value (for a specific currency) in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute == "1").
-* POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and marked as inactive (currency "live" attribute == "0").
-* DEL request makes a currency inactive. <br/> Content of the dynamic list limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute == "1").
+* PUT request generates a call to the external rates service and updates the rate value (for a specific currency) in the XML data store. <br/> Content of the dynamic list is limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute == "1").
+* POST request gets the currency rate and value (for a new currency) and insert a new record in the XML data store. <br/> Content of the dynamic list is limited to the currencies that are available for update within the XML data store and marked as inactive (currency "live" attribute == "0").
+* DEL request makes a currency inactive. <br/> Content of the dynamic list is limited to the currencies that are available for update within the XML data store and set to active <br/> (currency "live" attribute == "1").
 
 #### Dynamic dropdown list & PUT request response
 
