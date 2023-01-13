@@ -67,7 +67,7 @@ Code  | Message
 
 #### Error response 
 
-<img src="https://user-images.githubusercontent.com/79979904/212061360-815be3e4-a3c7-4a24-b333-de247f7c0617.jpg" width="200">
+<img src="https://user-images.githubusercontent.com/79979904/212061360-815be3e4-a3c7-4a24-b333-de247f7c0617.jpg" width="300">
 
 ### CRUD Functionality
 
